@@ -3,9 +3,13 @@ package units;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
+import flixel.input.gamepad.FlxGamepadInputID;
 
 class CatZima extends GenericGuy
 {
+	var allowKeyboard = true;
+	var allowGamepad = true;
+
 	public function new()
 	{
 		super("sdf");
@@ -26,26 +30,26 @@ class CatZima extends GenericGuy
 
 		var directionX = 0;
 		var directionY = 0;
-		if (FlxG.keys.anyPressed(["LEFT", "A"]))
+		if (checkLeft())
 		{
 			directionX -= 1;
 		}
-		if (FlxG.keys.anyPressed(["RIGHT", "D"]))
+		if (checkRight())
 		{
 			directionX += 1;
 		}
-		if (FlxG.keys.anyPressed(["UP", "W"]))
+		if (checkUp())
 		{
 			directionY -= 1;
 		}
-		if (FlxG.keys.anyPressed(["DOWN", "S"]))
+		if (checkDown())
 		{
 			directionY += 1;
 		}
 
 		player.setMoveDirection(directionX, directionY);
 
-		if (FlxG.keys.anyPressed(["SPACE", "J"]))
+		if (checkAction())
 		{
 			if (shootPrepare())
 				CatZimaState.shootTweetBullet();
@@ -64,5 +68,75 @@ class CatZima extends GenericGuy
 		
 		if (player.y > FlxG.height - borderSize - player.height)
 			player.y = FlxG.height - borderSize - player.height;
+	}
+
+	function checkLeft(): Bool
+	{
+		if (allowKeyboard && FlxG.keys.anyPressed(["LEFT", "A"]))
+			return true;
+		
+		if (allowGamepad && FlxG.gamepads.anyPressed(DPAD_LEFT))
+			return true;
+
+		if (allowGamepad && FlxG.gamepads.anyPressed(LEFT_STICK_DIGITAL_LEFT))
+			return true;
+		
+		return false;
+	}
+
+	function checkRight(): Bool
+	{
+		if (allowKeyboard && FlxG.keys.anyPressed(["RIGHT", "D"]))
+			return true;
+		
+		if (allowGamepad && FlxG.gamepads.anyPressed(DPAD_RIGHT))
+			return true;
+
+		if (allowGamepad && FlxG.gamepads.anyPressed(LEFT_STICK_DIGITAL_RIGHT))
+			return true;
+			
+		return false;
+	}
+
+	function checkUp(): Bool
+	{
+		if (allowKeyboard && FlxG.keys.anyPressed(["UP", "W"]))
+			return true;
+		
+		if (allowGamepad && FlxG.gamepads.anyPressed(DPAD_UP))
+			return true;
+
+		if (allowGamepad && FlxG.gamepads.anyPressed(LEFT_STICK_DIGITAL_UP))
+			return true;
+			
+		return false;
+	}
+
+	function checkDown(): Bool
+	{
+		if (allowKeyboard && FlxG.keys.anyPressed(["DOWN", "S"]))
+			return true;
+		
+		if (allowGamepad && FlxG.gamepads.anyPressed(DPAD_DOWN))
+			return true;
+
+		if (allowGamepad && FlxG.gamepads.anyPressed(LEFT_STICK_DIGITAL_DOWN))
+			return true;
+			
+		return false;
+	}
+
+	function checkAction(): Bool
+	{
+		if (allowKeyboard && FlxG.keys.anyPressed(["SPACE", "J"]))
+			return true;
+		
+		if (allowGamepad && FlxG.gamepads.anyPressed(A))
+			return true;
+
+		if (allowGamepad && FlxG.gamepads.anyPressed(B))
+			return true;
+			
+		return false;
 	}
 }
