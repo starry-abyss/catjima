@@ -6,7 +6,6 @@ import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.math.FlxVector;
 import flixel.math.FlxPoint;
-import flixel.util.FlxTimer;
 
 class GenericEffect extends FlxSprite
 {

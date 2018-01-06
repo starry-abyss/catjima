@@ -4,7 +4,7 @@ class Casual extends GenericGuy
 {
 	public function new()
 	{
-		super("enemy");
+		super("blonde");
 
         speed = 50;
 	}
@@ -20,4 +20,5 @@ class Casual extends GenericGuy
     {
         kill();
     }
+
 }

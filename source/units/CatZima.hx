@@ -7,49 +7,105 @@ import flixel.input.gamepad.FlxGamepadInputID;
 
 class CatZima extends GenericGuy
 {
-	var allowKeyboard = true;
-	var allowGamepad = true;
+	public static var allowKeyboard = true;
+	public static var allowGamepad = true;
+
+	public var allowShoot = true;
+	public var allowMove = true;
+	//public var waitToAllowMove = false;
+
+	public var waitMoveTimer = 0.0;
 
 	public function new()
 	{
 		super("sdf");
 
-		health = 3;
+		health = ChoiceState.hireBonus == 1 ? 7 : 5;
+		speed = 150;
+
+		shootRate = ChoiceState.hireBonus == 0 ? 0.35 : 0.5;
 	}
+
+	override public function reset(x: Float, y: Float)
+    {
+        super.reset(x, y);
+
+        waitMoveTimer = 0.0;
+    }
 
 	override public function onTouch()
     {
-        hurt(1);
+		/*if (invincibleTimer <= 0)
+		{
+			invincibleTimer = 2.0;
+        	hurt(1);
+		}*/
+
+		hurt(1);
     }
+
+	override public function kill()
+	{
+		/*if (alive)
+		{
+			CatZimaState.restartGame = true;
+			//FlxG.switchState(new AchievementState());
+		}*/
+
+		super.kill();
+	}
 
 	override public function update(elapsed: Float): Void
 	{
 		super.update(elapsed);
 
+		if (waitMoveTimer > 0.0)
+		{
+			waitMoveTimer -= elapsed;
+		}
+
 		var player = this;
 
-		var directionX = 0;
-		var directionY = 0;
-		if (checkLeft())
+		var directionX: Int = 0;
+		var directionY: Int = 0;
+		//if (allowMove || waitToAllowMove)
+		if (allowMove && (waitMoveTimer <= 0.0))
 		{
-			directionX -= 1;
-		}
-		if (checkRight())
-		{
-			directionX += 1;
-		}
-		if (checkUp())
-		{
-			directionY -= 1;
-		}
-		if (checkDown())
-		{
-			directionY += 1;
+			if (checkLeft())
+			{
+				directionX -= 1;
+			}
+			if (checkRight())
+			{
+				directionX += 1;
+			}
+			if (checkUp())
+			{
+				directionY -= 1;
+			}
+			if (checkDown())
+			{
+				directionY += 1;
+			}
+
+			/*if (waitToAllowMove)
+			{
+				if ((directionX == 0) && (directionY == 0))
+				{
+					waitToAllowMove = false;
+					allowMove = true;
+				}
+				else
+				{
+					directionX = 0;
+					directionY = 0;
+				}
+			}*/
 		}
 
 		player.setMoveDirection(directionX, directionY);
 
-		if (checkAction())
+		if (allowShoot && checkAction())
 		{
 			if (shootPrepare())
 				CatZimaState.shootTweetBullet();

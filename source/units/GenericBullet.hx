@@ -10,6 +10,9 @@ class GenericBullet extends FlxSprite
 {
     var speed = 300.0;
 
+    public var centerX(get, never): Float;
+    public var centerY(get, never): Float;
+
 	public function new(graphic: String)
 	{
 		super();
@@ -52,6 +55,20 @@ class GenericBullet extends FlxSprite
         velocity.set(((facing == FlxObject.LEFT) ? -1 : 1) * speed, 0);
     }
 
+    public function shootPlayer()
+    {
+        var player = CatZimaState.player;
+
+        var v = FlxVector.get(Math.round(player.centerX - centerX), Math.round(player.centerY - centerY));
+        var length = v.length;
+        if (length != 0.0)
+            v.set(v.x / length, v.y / length);
+
+        //var oldVelocityX = velocity.x;
+
+        velocity.set(v.x * speed, v.y * speed);
+    }
+
 	override public function update(elapsed: Float): Void
 	{
 		super.update(elapsed);
@@ -63,4 +80,14 @@ class GenericBullet extends FlxSprite
             kill();
         }
 	}
+
+    function get_centerX(): Float
+    {
+        return x + width / 2;
+    }
+
+    function get_centerY(): Float
+    {
+        return y + height / 2;
+    }
 }

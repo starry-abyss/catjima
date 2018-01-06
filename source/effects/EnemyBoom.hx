@@ -7,13 +7,13 @@ import flixel.math.FlxMath;
 import flixel.math.FlxVector;
 import flixel.math.FlxPoint;
 
-class TweetBoom extends GenericEffect
+class EnemyBoom extends GenericEffect
 {
 	public function new(graphic: String, width: Int, height: Int)
 	{
-		super("shotExplosion", 32, 32);
+		super("explosion Test", 64, 64);
        
-        animation.add("stand", [0, 1, 2, 3, 4], 10, false);
+        animation.add("stand", [0, 1, 2, 3, 4, 5, 6], 10, false);
 
         revive();
 	}

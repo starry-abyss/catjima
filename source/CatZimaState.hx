@@ -9,16 +9,32 @@ import flixel.group.FlxGroup;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
+import flixel.util.FlxTimer;
 
 class CatZimaState extends FlxState
 {
 	static public var player: units.CatZima;
-	static var enemies = new FlxGroup();
+	/*static var enemies = new FlxGroup();
 
 	static var playerBullets = new FlxGroup();
 	static var enemyBullets = new FlxGroup();
 
-    static var effects = new FlxGroup();
+    static var effects = new FlxGroup();*/
+
+    public static var enemies: FlxGroup;
+
+	public static var playerBullets: FlxGroup;
+	public static var enemyBullets: FlxGroup;
+
+    static var effects: FlxGroup;
+
+    public static var timerManager: FlxTimerManager;
+
+    // 'true' after losing or beating the game
+    public static var restartGame: Bool = false;
+
+    //public static inline var fontPath = "assets/fonts/UpheavalPro.ttf";
+    public static inline var fontPath = "assets/fonts/ps2p/PressStart2P.ttf";
 
     static public function shootTweetBullet()
     {
@@ -43,19 +59,38 @@ class CatZimaState extends FlxState
 
     static public function spawnEffect(effectClass: Class<FlxBasic>, x: Float, y: Float)
     {
-        var effect: FlxSprite = cast playerBullets.recycle(effectClass);
+        var effect: FlxSprite = cast effects.recycle(effectClass);
 
         effect.reset(x - effect.width / 2, y - effect.height / 2);
     }
 
 	override public function create():Void
 	{
+        timerManager = new FlxTimerManager();
+
 		super.create();
+
+		FlxG.camera.pixelPerfectRender = true;
+		FlxG.worldDivisions = 1;
 
         player = new units.CatZima();
 
         FlxG.stage.color = 0x3F757D;
         FlxG.mouse.visible = false;
+        //FlxG.keys.reset
+
+        player.reset(FlxG.width / 2 - player.width / 2, FlxG.height / 2 - player.height / 2);
+
+        enemies = new FlxGroup();
+        playerBullets = new FlxGroup();
+	    enemyBullets = new FlxGroup();
+
+        effects = new FlxGroup();
+
+        player.allowShoot = true;
+        player.allowMove = true;
+
+        add(timerManager);
 	}
 
     function playerHitByBullet(p, b)
@@ -72,7 +107,7 @@ class CatZimaState extends FlxState
 
     function enemyHitByBullet(e, b)
     {
-        e.kill();
+        e.hurt(1);
         b.kill();
     }
 
@@ -80,9 +115,19 @@ class CatZimaState extends FlxState
 	{
 		super.update(elapsed);
 
-        FlxG.overlap(player, enemyBullets, playerHitByBullet);
-        FlxG.overlap(enemies, playerBullets, enemyHitByBullet);
+        if (!restartGame)
+        {
+            FlxG.overlap(player, enemyBullets, playerHitByBullet);
+            FlxG.overlap(enemies, playerBullets, enemyHitByBullet);
 
-        FlxG.overlap(player, enemies, playerHitByEnemy);
+            FlxG.overlap(player, enemies, playerHitByEnemy);
+
+            FlxG.collide(enemies, enemies);
+        }
+        else
+        {
+            FlxG.switchState(new ChoiceState());
+        }
+        
 	}
 }

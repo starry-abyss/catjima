@@ -2,11 +2,13 @@ package units;
 
 import flixel.FlxG;
 import flixel.FlxObject;
+import flixel.FlxBasic;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
 import flixel.math.FlxVector;
 import flixel.math.FlxPoint;
 import flixel.util.FlxTimer;
+import Type;
 
 class GenericGuy extends FlxSprite
 {
@@ -15,10 +17,15 @@ class GenericGuy extends FlxSprite
     
     public var bulletSource(default, null) = new FlxPoint(36, 25);
 
-    var shootTimer = new FlxTimer();
+    var shootTimer: FlxTimer;
 
-    var centerX(get, never): Float;
-    var centerY(get, never): Float;
+    public var centerX(get, never): Float;
+    public var centerY(get, never): Float;
+
+    var abilityTimer = 0.0;
+    
+	var invincibleTimer = 0.0;
+
 
 	public function new(graphic: String)
 	{
@@ -37,11 +44,29 @@ class GenericGuy extends FlxSprite
 
         setFacingFlip(FlxObject.LEFT, true, false);
         setFacingFlip(FlxObject.RIGHT, false, false);
+
+        shootTimer = new FlxTimer(CatZimaState.timerManager);
 	}
 
 	override public function update(elapsed: Float): Void
 	{
 		super.update(elapsed);
+
+        if (abilityTimer > 0.0)
+		{
+			abilityTimer -= elapsed;
+		}
+
+        if (invincibleTimer > 0.0)
+		{
+			invincibleTimer -= elapsed;
+
+			alpha = Math.sin(invincibleTimer * 15) * 0.5 + 0.5;
+		}
+		else
+		{
+			alpha = 1;
+		}
 	}
 
     public function setMoveDirection(directionX: Int, directionY: Int)
@@ -80,6 +105,91 @@ class GenericGuy extends FlxSprite
         setMoveDirection(Math.round(player.centerX - centerX), Math.round(player.centerY - centerY));
     }
 
+    function chasePlayerY()
+    {
+        var player = CatZimaState.player;
+
+        var dx = 0;
+        var posX = 25;
+
+        if (centerX < FlxG.width / 2)
+        {
+            if (centerX < posX)
+                dx = 1;
+        }
+        else
+        {
+            if (centerX > FlxG.width - posX)
+                dx = -1;
+        }
+
+        setMoveDirection(dx, Math.round(player.centerY - centerY));
+    }
+
+    function standStill(posX: Float): Bool
+    {
+        var player = CatZimaState.player;
+
+        var dx = 0;
+        //var posX = 25;
+
+        if (centerX < FlxG.width / 2)
+        {
+            if (centerX < posX)
+                dx = 1;
+            
+            facing = FlxObject.RIGHT;
+        }
+        else
+        {
+            if (centerX > FlxG.width - posX)
+                dx = -1;
+
+            facing = FlxObject.LEFT;
+        }
+
+        setMoveDirection(dx, 0);
+
+        return (dx == 0);
+    }
+
+    function teleport()
+    {
+        setPosition(FlxG.width - centerX - width / 2, y);
+        last.set(x, y);
+    }
+
+    function teleportIfBullet()
+    {
+        if (abilityTimer <= 0.0)
+        {
+            var needTeleport = false;
+
+            CatZimaState.playerBullets.forEachAlive(
+                function (b: FlxBasic)
+                {
+                    //trace(Type.typeof(b));
+                    var bullet = cast(b, GenericBullet);
+
+                    //trace(Math.abs(centerX - bullet.centerX) + Math.abs(centerY - bullet.centerY));
+
+                    if (
+                        (Math.abs(centerX - bullet.centerX) < 100)
+                        && (Math.abs(centerY - bullet.centerY) < bullet.height + height / 2)
+                        && (bullet.facing != facing)
+                        )
+                            needTeleport = true;
+                }
+            );
+
+            if (needTeleport)
+            {
+                abilityTimer = 1.5;
+                teleport();
+            }
+        }
+    }
+
     function get_centerX(): Float
     {
         return x + width / 2;
@@ -94,4 +204,35 @@ class GenericGuy extends FlxSprite
     {
 
     }
+    
+	override public function kill()
+    {
+        // if (isOnScreen())
+        {
+            CatZimaState.spawnEffect(effects.EnemyBoom, centerX, centerY);
+        }
+
+        super.kill();
+
+        //exists = true;
+    }
+
+    override public function hurt(amount: Float)
+    {
+        if (invincibleTimer <= 0)
+		{
+			invincibleTimer = 1.0;
+        	super.hurt(amount);
+		}
+        
+    }
+
+    override public function reset(x: Float, y: Float)
+    {
+        super.reset(x, y);
+
+        abilityTimer = 0.0;
+	    invincibleTimer = 0.0;
+    }
+
 }
