@@ -14,11 +14,16 @@ class CatZima extends GenericGuy
 	public var allowMove = true;
 	//public var waitToAllowMove = false;
 
+	public static var graphicString = "sdf";
+
+	public static var movingWithGamepad = false;
+	public static var movingWithKeyboard = false;
+
 	public var waitMoveTimer = 0.0;
 
 	public function new()
 	{
-		super("sdf");
+		super(graphicString);
 
 		health = ChoiceState.hireBonus == 1 ? 7 : 5;
 		speed = 150;
@@ -55,6 +60,16 @@ class CatZima extends GenericGuy
 		super.kill();
 	}
 
+	override public function hurt(amount: Float)
+    {
+        if (invincibleTimer <= 0)
+		{
+			CatZimaState.playSoundRandom("hit", 1.0, 3);
+		}
+        
+		super.hurt(amount);
+    }
+
 	override public function update(elapsed: Float): Void
 	{
 		super.update(elapsed);
@@ -68,6 +83,11 @@ class CatZima extends GenericGuy
 
 		var directionX: Int = 0;
 		var directionY: Int = 0;
+
+
+		movingWithKeyboard = false;
+		movingWithGamepad = false;
+
 		//if (allowMove || waitToAllowMove)
 		if (allowMove && (waitMoveTimer <= 0.0))
 		{
@@ -157,13 +177,22 @@ class CatZima extends GenericGuy
 	function checkUp(): Bool
 	{
 		if (allowKeyboard && FlxG.keys.anyPressed(["UP", "W"]))
+		{
+			movingWithKeyboard = !movingWithKeyboard;
 			return true;
+		}
 		
 		if (allowGamepad && FlxG.gamepads.anyPressed(DPAD_UP))
+		{
+			movingWithGamepad = !movingWithGamepad;
 			return true;
+		}
 
 		if (allowGamepad && FlxG.gamepads.anyPressed(LEFT_STICK_DIGITAL_UP))
+		{
+			movingWithGamepad = !movingWithGamepad;
 			return true;
+		}
 			
 		return false;
 	}
@@ -171,13 +200,22 @@ class CatZima extends GenericGuy
 	function checkDown(): Bool
 	{
 		if (allowKeyboard && FlxG.keys.anyPressed(["DOWN", "S"]))
+		{
+			movingWithKeyboard = !movingWithKeyboard;
 			return true;
+		}
 		
 		if (allowGamepad && FlxG.gamepads.anyPressed(DPAD_DOWN))
+		{
+			movingWithGamepad = !movingWithGamepad;
 			return true;
+		}
 
 		if (allowGamepad && FlxG.gamepads.anyPressed(LEFT_STICK_DIGITAL_DOWN))
+		{
+			movingWithGamepad = !movingWithGamepad;
 			return true;
+		}
 			
 		return false;
 	}

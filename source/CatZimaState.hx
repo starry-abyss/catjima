@@ -9,7 +9,9 @@ import flixel.group.FlxGroup;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
+import flixel.math.FlxRandom;
 import flixel.util.FlxTimer;
+import flixel.system.FlxSound;
 
 class CatZimaState extends FlxState
 {
@@ -36,6 +38,57 @@ class CatZimaState extends FlxState
     //public static inline var fontPath = "assets/fonts/UpheavalPro.ttf";
     public static inline var fontPath = "assets/fonts/ps2p/PressStart2P.ttf";
 
+    static var music: FlxSound = null;
+    static var volumeInLevel = 0.7;
+    static var volumeInMenu = 0.5;
+    static var musicInMenu = false;
+
+    static var random = new FlxRandom();
+
+    public static function playSound(name: String, volume: Float = 1.0)
+    {
+        FlxG.sound.play("assets/sounds/" + name + ".wav", volume);
+    }
+
+    public static function playSoundRandom(name: String, volume: Float, max: Int)
+    {
+        var number = random.int(1, max);
+        FlxG.sound.play("assets/sounds/" + name + '${number}.wav', volume);
+    }
+
+    static function initMusic(volume: Float)
+    {
+        if (music == null)
+        {
+            music = new FlxSound();
+            music.loadEmbedded("assets/music/Gaminator.ogg", true, false);
+            music.persist = true;
+            music.volume = volume;
+            music.play();
+            
+            return true;
+        }
+
+        music.fadeOut(1.0, volume);
+        return false;
+    }
+
+    public static function musicMenu()
+    {
+        if (!musicInMenu)
+            initMusic(volumeInMenu);
+        
+        musicInMenu = true;
+    }
+
+    public static function musicLevel()
+    {
+        if (musicInMenu)
+            initMusic(volumeInLevel);
+        
+        musicInMenu = false;
+    }
+
     static public function shootTweetBullet()
     {
         var bullet: units.TweetBullet = cast playerBullets.recycle(units.TweetBullet);
@@ -50,6 +103,8 @@ class CatZimaState extends FlxState
         bullet.facing = player.facing;
 
         shootBullet(bullet);
+
+        playSoundRandom("tweet", 1.0, 4);
     }
 
     static function shootBullet(bullet: units.GenericBullet)

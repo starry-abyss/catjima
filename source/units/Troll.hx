@@ -3,16 +3,40 @@ package units;
 import Type;
 import flixel.FlxBasic;
 import flixel.FlxSprite;
+import flixel.math.FlxRandom;
 
 class Troll extends GenericGuy
 {
 	var secondsToGoAway = 10.0;
+
+	var random = new FlxRandom();
 
 	override public function reset(x: Float, y: Float)
     {
         super.reset(x, y);
 
         abilityTimer = secondsToGoAway;
+
+		var enemyListFiltered = [];
+		var enemyList = PlayState.enemiesToSpawn;
+
+		for (e in enemyList)
+		{
+			if (e != Troll)
+				enemyListFiltered.push(e);
+		}
+
+		var graphicString = CatZima.graphicString;
+		if (enemyListFiltered.length > 0)
+		{
+			 var enemyIndex = random.int(0, enemyListFiltered.length - 1);
+			 graphicString = Reflect.field(enemyListFiltered[enemyIndex], "graphicString");
+
+			 if (graphicString == null)
+			 	graphicString = CatZima.graphicString;
+		}
+
+		setGraphic(graphicString);
     }
 
 	public function new()
@@ -37,6 +61,14 @@ class Troll extends GenericGuy
 		}
 	}
 
+	override public function kill()
+    {
+        if (alive)
+            CatZimaState.playSoundRandom("troll", 1.0, 3);
+
+        super.kill();
+    }
+
 	override public function hurt(amount: Float)
     {
         if (invincibleTimer <= 0)
@@ -44,6 +76,8 @@ class Troll extends GenericGuy
 			abilityTimer = secondsToGoAway;
 
 			var ignoreList: Array<FlxBasic> = [];
+
+			CatZimaState.playSoundRandom("troll_magic", 1.0, 3);
 
 			CatZimaState.enemies.forEachAlive(
 				function (e: FlxBasic)

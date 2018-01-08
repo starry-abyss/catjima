@@ -25,21 +25,26 @@ class BriefingState extends CatZimaState
 	{
 		super.create();
 
+        var background = new FlxSprite();
+        background.loadGraphic("assets/images/background.png");
+        background.scrollFactor.set();
+        add(background);
+
         var hint: ChoiceButton = null;
 
         switch (hintId)
         {
             case HINT_BLONDE:
-                hint = new ChoiceButton("Знакомьтесь: Казуальный игрок\n\nНе будет игры на мобилку - затапает!", 0, 0, 10, 4/9, "units/blonde");
+                hint = new ChoiceButton("Недоволен выбором: Казуальный игрок\n\nНе будет игры на мобилку - затапает!", 0, 0, 10, 4/9, "units/blonde");
 
             case HINT_HARDCORE:
-                hint = new ChoiceButton("Знакомьтесь: Хардкорный игрок\n\nСросся с контроллером. Реакция - как у ниндзи!", 0, 0, 10, 4/9, "units/hardcore");
+                hint = new ChoiceButton("Недоволен выбором: Хардкорный игрок\n\nСросся с контроллером. Реакция - как у ниндзи!", 0, 0, 10, 4/9, "units/hardcore");
 
             case HINT_TROLL:
-                hint = new ChoiceButton("Знакомьтесь: Анонимный тролль\n\nИзбегать любого контакта! Сам уйдёт.", 0, 0, 10, 4/9, null);
+                hint = new ChoiceButton("Недоволен по жизни: Анонимный тролль\n\nИзбегать любого контакта! Влияет на окружающих.", 0, 0, 10, 4/9, "units/sdf");
 
             case HINT_BUG:
-                hint = new ChoiceButton("Знакомьтесь: Баг после апдейта\n\nПосмотрим правде в глаза - на них не действуют твиты.", 0, 0, 10, 4/9, null);
+                hint = new ChoiceButton("Недоволен выбором: Баг после апдейта\n\nВнедрён агентом Смитом. Позовите программистов!", 0, 0, 10, 4/9, null);
 
             default: {}
         }
@@ -67,7 +72,30 @@ class BriefingState extends CatZimaState
         player.allowMove = false;
 
         bgColor = 0;
-       
+        
+        
+        if (hintId == HINT_BLONDE)
+        {
+            var keyHintText = new Text("Нажмите         для отправки твита");
+            keyHintText.reset(20, 160);
+            keyHintText.color = 0xff000000;
+            add(keyHintText);
+
+            var keyHint = new FlxSprite();
+            keyHint.scrollFactor.set();
+            add(keyHint);
+
+            if (units.CatZima.allowKeyboard)
+            {
+                keyHint.loadGraphic("assets/images/ui/Space Button.png");
+                keyHint.reset(95, 160);
+            }
+            else
+            {
+                keyHint.loadGraphic("assets/images/ui/Button A.png");
+                keyHint.reset(105, 155);
+            }
+        }
 	}
 
 	override public function update(elapsed:Float):Void

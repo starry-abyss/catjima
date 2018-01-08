@@ -121,9 +121,14 @@ class PlayState extends CatZimaState
 
 		if (!player.alive)
 		{
-			CatZimaState.restartGame = true;
+			//CatZimaState.restartGame = true;
 			//FlxG.switchState(new AchievementState());
+
+			ChoiceState.reset();
+			FlxG.switchState(new ChoiceState());
 		}
+
+		CatZimaState.musicLevel();
 	}
 
 	function winTheLevel()

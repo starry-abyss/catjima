@@ -3,10 +3,11 @@ import flixel.FlxObject;
 
 class Hardcore extends GenericGuy
 {
+    public static var graphicString = "hardcore";
 
 	public function new()
 	{
-		super("hardcore");
+		super(graphicString);
 
         speed = 75;
         shootRate = 3;
@@ -34,12 +35,22 @@ class Hardcore extends GenericGuy
 
                 //shootBullet(bullet);
                 bullet.shootPlayer();
+
+                CatZimaState.playSoundRandom("ninja_shoot", 1.0, 3);
             }
 	}
 
     override public function onTouch()
     {
         //kill();
+    }
+
+    override public function kill()
+    {
+        if (alive)
+            CatZimaState.playSoundRandom("ninja_die", 1.0, 3);
+
+        super.kill();
     }
 
 }

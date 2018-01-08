@@ -14,7 +14,7 @@ class GenericGuy extends FlxSprite
 {
     var speed = 100.0;
     var shootRate = 0.5;
-    
+
     public var bulletSource(default, null) = new FlxPoint(36, 25);
 
     var shootTimer: FlxTimer;
@@ -31,22 +31,30 @@ class GenericGuy extends FlxSprite
 	{
 		super();
 
-        loadGraphic("assets/images/units/" + graphic + ".png", true, 50, 50);
-        //updateHitbox();
-        setSize(20, 30);
-
-        centerOffsets();
-       
-        animation.add("stand", [0, 1], 3, true);
-        animation.play("stand");
-
-        scrollFactor.set();
+        setGraphic(graphic);
 
         setFacingFlip(FlxObject.LEFT, true, false);
         setFacingFlip(FlxObject.RIGHT, false, false);
 
         shootTimer = new FlxTimer(CatZimaState.timerManager);
 	}
+
+    function setGraphic(graphic: String)
+    {
+        loadGraphic("assets/images/units/" + graphic + ".png", true, 50, 50);
+        //updateHitbox();
+        setSize(20, 30);
+
+        centerOffsets();
+       
+        animation.add("stand", [0, 1], 1, true);
+        //animation.play("stand");
+
+        animation.add("move", [0, 1], 3, true);
+        animation.play("move");
+
+        scrollFactor.set();
+    }
 
 	override public function update(elapsed: Float): Void
 	{
@@ -83,6 +91,17 @@ class GenericGuy extends FlxSprite
         if (velocity.x != 0.0)
         {
             facing = (velocity.x < 0) ? FlxObject.LEFT : FlxObject.RIGHT;
+        }
+
+        if (velocity.x != 0.0 || velocity.y != 0.0)
+        {
+            if (animation.curAnim.name != "move")
+                animation.play("move", true, animation.frameIndex == 0);
+        }
+        else
+        {
+            if (animation.curAnim.name != "stand")
+                animation.play("stand", true, animation.frameIndex == 0);
         }
 
         v.put();
@@ -186,6 +205,8 @@ class GenericGuy extends FlxSprite
             {
                 abilityTimer = 1.5;
                 teleport();
+
+                CatZimaState.playSoundRandom("ninja_shift", 1.0, 3);
             }
         }
     }

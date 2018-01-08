@@ -2,9 +2,11 @@ package units;
 
 class Casual extends GenericGuy
 {
+    public static var graphicString = "blonde";
+
 	public function new()
 	{
-		super("blonde");
+		super(graphicString);
 
         speed = 50;
 	}
@@ -18,7 +20,17 @@ class Casual extends GenericGuy
 
     override public function onTouch()
     {
+        
+
         kill();
+    }
+
+    override public function kill()
+    {
+        if (alive)
+            CatZimaState.playSoundRandom("kiss", 1.0, 3);
+
+        super.kill();
     }
 
 }
