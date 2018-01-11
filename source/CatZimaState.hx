@@ -138,6 +138,9 @@ class CatZimaState extends FlxState
         shootBullet(bullet);
 
         playSoundRandom("tweet", 1.0, 4);
+
+        if (Std.is(FlxG.state, BriefingState))
+            musicLevel();
     }
 
     static function shootBullet(bullet: units.GenericBullet)
@@ -201,8 +204,15 @@ class CatZimaState extends FlxState
 
     function playerHitByEnemy(p, e)
     {
-        cast(p, units.GenericGuy).onTouch();
-        cast(e, units.GenericGuy).onTouch();
+        if (Std.is(e, units.Streamer))
+        {
+            cast(e, units.Streamer).softKill();
+        }
+        else
+        {
+            cast(p, units.GenericGuy).onTouch();
+            cast(e, units.GenericGuy).onTouch();
+        }
     }
 
     function enemyHitByBullet(e, b)

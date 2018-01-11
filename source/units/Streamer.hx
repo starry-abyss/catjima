@@ -8,8 +8,8 @@ class Streamer extends GenericGuy
 
     var bullet: StreamAttack = null;
 
-    var stopShootDuration = 4;
-    var shootShift = 1;
+    var stopShootDuration = 2;
+    var shootShift = 0.5;
 
     var speedY = 30;
     var speedYBullet = 10;
@@ -20,7 +20,7 @@ class Streamer extends GenericGuy
 
         speed = 50;
         overrideSpeedY = speedY;
-        shootRate = 4.5;
+        shootRate = 2.5;
 
         //bullet = ;
 	}
@@ -31,6 +31,14 @@ class Streamer extends GenericGuy
 
         //teleportIfBullet();
 
+        if (!alive)
+        {
+            if (isOnScreen())
+                goAway();
+            else
+                exists = false;
+        }
+        else
         if (chasePlayerY())
         //if (standStill(25))
         {
@@ -40,6 +48,7 @@ class Streamer extends GenericGuy
             //    if (shootPrepare())
 
             if (shootTimer.elapsedTime >= shootRate - stopShootDuration && shootTimer.elapsedTime <= shootRate - stopShootDuration + shootShift)
+            //if (shootTimer.elapsedTime <= shootRate - stopShootDuration)
             {
                 if (bullet == null)
                 {
@@ -47,6 +56,8 @@ class Streamer extends GenericGuy
 
                     // this bullet type's width is adjustable
                     bullet.width = FlxG.width;
+                    bullet.offset.set(-0.5 * (bullet.width - bullet.frameWidth), -0.5 * (bullet.height - bullet.frameHeight));
+                    bullet.centerOrigin();
 
                     //shootBullet(bullet);
                     //bullet.shootPlayer();
@@ -97,6 +108,32 @@ class Streamer extends GenericGuy
 
             bullet = null;
         }
+    }
+
+    public function softKill()
+    {
+        if (alive)
+        {
+            alive = false;
+
+            if (ChoiceState.streamerBonus == -1)
+                ChoiceState.streamerBonus = 0;
+
+            ChoiceState.streamerBonus++;
+
+            //kill();
+
+            killBullet();
+
+            allowCollisions = FlxObject.NONE;
+        }
+    }
+
+    override public function revive()
+    {
+        super.revive();
+
+        allowCollisions = FlxObject.ANY;
     }
 
     override public function kill()

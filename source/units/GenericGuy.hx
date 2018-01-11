@@ -157,9 +157,30 @@ class GenericGuy extends FlxSprite
             facing = FlxObject.LEFT;
         }
 
-        setMoveDirection(dx, Math.round(player.centerY - centerY));
+        var onScreen = (x >= 0 && x <= FlxG.width - width);
 
-        return (x >= 0 && x <= FlxG.width - width);
+        setMoveDirection(dx, onScreen ? Math.round(player.centerY - centerY) : 0);
+
+        return onScreen;
+    }
+
+    function goAway()
+    {
+        var dx = 0;
+        if (centerX > FlxG.width / 2)
+        {
+            dx = 1;
+            
+            facing = FlxObject.RIGHT;
+        }
+        else
+        {
+            dx = -1;
+
+            facing = FlxObject.LEFT;
+        }
+
+        setMoveDirection(dx, 0);
     }
 
     // 'true' when not going to move

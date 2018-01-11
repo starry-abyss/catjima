@@ -126,7 +126,7 @@ class PlayState extends CatZimaState
 				}
 			}
 
-			CatZimaState.musicLevel();
+			//CatZimaState.musicLevel();
 		}
 	}
 

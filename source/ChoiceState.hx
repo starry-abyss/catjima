@@ -22,13 +22,16 @@ class ChoiceState extends CatZimaState
     static inline var MENU_DIALOGUE_2 = 4;
     static inline var MENU_GAMEPLAY_1 = 5;
     static inline var MENU_GAMEPLAY_2 = 6;
-    static inline var MENU_PRE_BOSS = 7;
+    //static inline var MENU_BUGS = 7;
+    static inline var MENU_PRE_BOSS = 8;
 
     static inline var MENU_END = MENU_PRE_BOSS + 1;
 
     public static var hireBonus = -1;
     public static var streamerBonus = -1;
     public static var journalistBonus = -1;
+    
+    public static var bonusLevelOrNot = -1;
     public static var dialogueOrGameplay = -1;
 
     var skip = false;
@@ -85,9 +88,9 @@ class ChoiceState extends CatZimaState
                 text1 = "Выбор 1: Выбор - через диалоги\n\nСледствие: Хардкорные игроки недовольны";
                 text2 = "Выбор 2: Выбор - через геймплей\n\nСледствие: У знакомых стримеров недовольны зрители";
             
-           /* case MENU_DIALOGUE_1:
-                text1 = "Выбор 1: Выбор - через диалоги\n\nСледствие: Хардкорные игроки недовольны";
-                text2 = "Выбор 2: Выбор - через геймплей\n\nСледствие: У знакомых стримеров недовольны зрители";*/
+            case MENU_DIALOGUE_1:
+                text1 = "Выбор 1: Строгий сюжет\n\nСледствие: Короткая лаконичная игра";
+                text2 = "Выбор 2: Опциональные квесты\n\nСледствие: Полнота истории и ощущений";
 
             case MENU_DIALOGUE_2:
                 text1 = "Выбор 1: Выпустить игру по плану с багами\n\nСледствие: Поскорее релиз";
@@ -259,18 +262,6 @@ class ChoiceState extends CatZimaState
                 {
                     PlayState.enemiesToSpawn = [units.Casual, units.Hardcore, units.Casual, units.Casual, units.Hardcore, units.Hardcore];
                     BriefingState.hintId = BriefingState.HINT_HARDCORE;
-                }
-                else
-                {
-                    PlayState.enemiesToSpawn = [units.Streamer, units.Casual, units.Streamer, units.Casual, units.Casual, units.Streamer];
-                    BriefingState.hintId = BriefingState.HINT_STREAMER;
-                }
-            
-            case MENU_NARRATIVE:
-                if (choice == 0)
-                {
-                    PlayState.enemiesToSpawn = [units.Casual, units.Hardcore, units.Casual, units.Casual, units.Hardcore, units.Hardcore];
-                    BriefingState.hintId = BriefingState.HINT_HARDCORE;
 
                     menuId = MENU_DIALOGUE_1;
                 }
@@ -283,18 +274,38 @@ class ChoiceState extends CatZimaState
                 }
 
                 noIncrement = true;
-            
+
             case MENU_GAMEPLAY_1:
                 if (streamerBonus == -1)
                     BriefingState.hintId = BriefingState.HINT_STREAMER_KILL;
                 else
                     BriefingState.hintId = BriefingState.HINT_STREAMER_SAVE;
 
+                PlayState.enemiesToSpawn = [units.Casual, units.Troll, units.Streamer, units.Casual, 
+                    units.Casual, units.Troll, units.Streamer, units.Streamer, units.Casual, 
+                    units.Casual, units.Troll, units.Streamer, units.Casual];
+
+            case MENU_DIALOGUE_1:
+                PlayState.enemiesToSpawn = [units.Casual, units.Troll, units.Hardcore, units.Casual, 
+                    units.Casual, units.Troll, units.Hardcore, units.Hardcore, units.Casual, 
+                    units.Casual, units.Troll, units.Hardcore, units.Casual];
+                
+                bonusLevelOrNot = choice;
+            
             case MENU_DIALOGUE_2:
                 if (choice == 0)
+                {
                     journalistBonus = 0;
-                
-                menuId = MENU_PRE_BOSS;
+                    menuId = MENU_PRE_BOSS;
+                }
+                else if (bonusLevelOrNot == 0)
+                {
+                    menuId = MENU_PRE_BOSS;
+                }
+                else
+                {
+                    //menuId = MENU_BUGS;
+                }
 
                 noIncrement = true;
 

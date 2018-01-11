@@ -126,7 +126,8 @@ class Troll extends GenericGuy
 				generateUnit(type, CatZimaState.player);
 
 			//CatZimaState.spawnEffect(effects.TrollCast, centerX, centerY);
-			CatZimaState.spawnEffect(effects.TrollFace, centerX, centerY, this);
+			if (invincibleTimer <= 0)
+				CatZimaState.spawnEffect(effects.TrollFace, centerX, centerY, this);
 		}
 
 		super.hurt(amount);
