@@ -9,7 +9,7 @@ class Hardcore extends GenericGuy
 	{
 		super(graphicString);
 
-        speed = 75;
+        overrideSpeedY = 75;
         shootRate = 3;
 	}
 

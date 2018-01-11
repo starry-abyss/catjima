@@ -15,6 +15,8 @@ class GenericGuy extends FlxSprite
     var speed = 100.0;
     var shootRate = 0.5;
 
+    var overrideSpeedY: Null<Float> = null;
+
     public var bulletSource(default, null) = new FlxPoint(36, 25);
 
     var shootTimer: FlxTimer;
@@ -77,6 +79,14 @@ class GenericGuy extends FlxSprite
 		}
 	}
 
+    function sign(number: Float): Int
+    {
+        if (number == 0.0)
+            return 0;
+
+        return number > 0 ? 1 : -1;
+    }
+
     public function setMoveDirection(directionX: Int, directionY: Int)
     {
         var v = FlxVector.get(directionX, directionY);
@@ -86,7 +96,7 @@ class GenericGuy extends FlxSprite
 
         //var oldVelocityX = velocity.x;
 
-        velocity.set(v.x * speed, v.y * speed);
+        velocity.set(overrideSpeedY != null ? sign(v.x) * speed : v.x * speed, overrideSpeedY != null ? sign(v.y) * overrideSpeedY : v.y * speed);
 
         if (velocity.x != 0.0)
         {
@@ -124,7 +134,8 @@ class GenericGuy extends FlxSprite
         setMoveDirection(Math.round(player.centerX - centerX), Math.round(player.centerY - centerY));
     }
 
-    function chasePlayerY()
+    // 'true' when appeared on the screen
+    function chasePlayerY(): Bool
     {
         var player = CatZimaState.player;
 
@@ -135,16 +146,23 @@ class GenericGuy extends FlxSprite
         {
             if (centerX < posX)
                 dx = 1;
+
+            facing = FlxObject.RIGHT;
         }
         else
         {
             if (centerX > FlxG.width - posX)
                 dx = -1;
+
+            facing = FlxObject.LEFT;
         }
 
         setMoveDirection(dx, Math.round(player.centerY - centerY));
+
+        return (x >= 0 && x <= FlxG.width - width);
     }
 
+    // 'true' when not going to move
     function standStill(posX: Float): Bool
     {
         var player = CatZimaState.player;

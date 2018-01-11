@@ -9,7 +9,7 @@ import flixel.math.FlxPoint;
 
 class EnemyBoom extends GenericEffect
 {
-	public function new(graphic: String, width: Int, height: Int)
+	public function new()
 	{
 		super("explosion Test", 64, 64);
        

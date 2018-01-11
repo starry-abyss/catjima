@@ -9,7 +9,7 @@ import flixel.math.FlxPoint;
 
 class TweetBoom extends GenericEffect
 {
-	public function new(graphic: String, width: Int, height: Int)
+	public function new()
 	{
 		super("shotExplosion", 32, 32);
        

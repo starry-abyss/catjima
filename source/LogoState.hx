@@ -7,6 +7,7 @@ import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
 import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
 
 class LogoState extends FlxState
 {
@@ -15,6 +16,8 @@ class LogoState extends FlxState
     var start_screen: FlxSprite;
 
     var startScaling = false;
+    var touchGround = 2;
+    var touchGroundGuard = false;
 
 	override public function create():Void
 	{
@@ -36,7 +39,7 @@ class LogoState extends FlxState
         logo_outside.scrollFactor.set();
         add(logo_outside);
 
-        FlxTween.tween(start_screen, { y: 0 }, 2, { onComplete: onCompleteLogo });
+        FlxTween.tween(start_screen, { y: 0 }, 2, { onComplete: onCompleteLogo, ease: FlxEase.bounceOut });
 
         FlxG.mouse.visible = false;
 	}
@@ -44,7 +47,7 @@ class LogoState extends FlxState
     function onCompleteLogo(_)
 	{
         startScaling = true;
-        FlxG.camera.shake(0.01, 0.5);
+        //FlxG.camera.shake(0.01, 0.5);
         //FlxTween.tween(start_screen, { y: 0 }, 1, { onComplete: function (_) {  } );
     }
 
@@ -52,12 +55,42 @@ class LogoState extends FlxState
 	{
 		super.update(elapsed);
 
+        //trace(start_screen.y);
+
+        if (touchGround > 0)
+        {
+            if (!touchGroundGuard)
+            {
+                if (start_screen.y > -10)
+                {
+                    touchGroundGuard = true;
+
+                    FlxG.camera.shake(0.005 * touchGround, 0.5);
+
+                    touchGround--;
+                    //FlxG.camera.stopFX();
+
+                    //trace("A");
+                }
+            }
+            else
+            {
+                if (start_screen.y < -20)
+                {
+                    touchGroundGuard = false;
+
+                    //trace("B");
+                }
+            }
+        }
+
         if (startScaling)
         {
-            var scale = logo_outside.scale.x + 2 * elapsed;
+            var scale = logo_outside.scale.x + 5 * elapsed;
+            logo_outside.x -= 70 * elapsed;
             logo_outside.scale.set(scale, scale);
 
-            if (logo_outside.scale.x > 5)
+            if (logo_outside.scale.x > 10)
             {
                 FlxG.switchState(new StartScreenState());
             }

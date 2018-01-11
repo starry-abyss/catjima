@@ -20,6 +20,11 @@ class BriefingState extends CatZimaState
     public static inline var HINT_HARDCORE = 1;
     public static inline var HINT_TROLL = 2;
     public static inline var HINT_BUG = 3;
+    public static inline var HINT_STREAMER = 4;
+    public static inline var HINT_STREAMER_SAVE = 5;
+    public static inline var HINT_STREAMER_KILL = 6;
+    public static inline var HINT_JOURNALIST = 7;
+    public static inline var HINT_BOSS = 7;
 
 	override public function create():Void
 	{
@@ -41,10 +46,25 @@ class BriefingState extends CatZimaState
                 hint = new ChoiceButton("Недоволен выбором: Хардкорный игрок\n\nСросся с контроллером. Реакция - как у ниндзи!", 0, 0, 10, 4/9, "units/hardcore");
 
             case HINT_TROLL:
-                hint = new ChoiceButton("Недоволен по жизни: Анонимный тролль\n\nИзбегать любого контакта! Влияет на окружающих.", 0, 0, 10, 4/9, "units/sdf");
+                hint = new ChoiceButton("Недоволен по жизни: Анонимный тролль\n\nИзбегать ЛЮБОГО контакта! Влияет на окружающих.", 0, 0, 10, 4/9, "units/trololoshka");
 
             case HINT_BUG:
-                hint = new ChoiceButton("Недоволен выбором: Баг после апдейта\n\nВнедрён агентом Смитом. Позовите программистов!", 0, 0, 10, 4/9, null);
+                hint = new ChoiceButton("Недоволен выбором: Баг после апдейта\n\nВнедрён агентом Смитом. Позовите программистов!", 0, 0, 10, 4/9, "units/bug");
+
+            case HINT_STREAMER:
+                hint = new ChoiceButton("Недоволен выбором: Стример\n\nСчитает, что его зрителям не понравится это изменение.", 0, 0, 10, 4/9, "units/streamer");
+
+            case HINT_STREAMER_SAVE:
+                hint = new ChoiceButton("Спасенный стример понял, что был не прав, отблагодарил, что вы с ним мягко обошлись, и обещал помочь вам в будущем.", 0, 0, 10, 4/9, null);
+            
+            case HINT_STREAMER_KILL:
+                hint = new ChoiceButton("После грубых разборок стримеры сильно обижены. Но зато про вашу игру написали обзор на Гамине и сравнили с Dark Souls.", 0, 0, 10, 4/9, null);
+            
+            case HINT_JOURNALIST:
+                hint = new ChoiceButton("Журналисты благодарят вас, что баги исправлены, и просят друзей в Твиттере увеличить длину сообщений в 2 раза.", 0, 0, 10, 4/9, null);
+
+            case HINT_BOSS:
+                hint = new ChoiceButton("Недоволен, что вы ещё живы: агент Смит.\n\nЭто точно его происки! Он искажает сознание пользователей!", 0, 0, 10, 4/9, null);
 
             default: {}
         }

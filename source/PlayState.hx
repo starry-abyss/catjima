@@ -99,41 +99,49 @@ class PlayState extends CatZimaState
 
 	function spawnEnemy(_)
 	{
-		if (enemiesToSpawn.length > 0)
+		if (!player.alive)
 		{
-			var enemyType = enemiesToSpawn.pop();
-			var enemy: FlxSprite = cast CatZimaState.enemies.recycle(enemyType);
-
-			var side = random.int(0, 1);
-			var x = (side == 0) ? -enemy.width : FlxG.width;
-			var y = random.int(0, Math.floor(FlxG.height / 2)) + FlxG.height / 4;
-
-        	enemy.reset(x - enemy.width / 2, y - enemy.height / 2);
+			loseTheLevel();
 		}
 		else
 		{
-			if (CatZimaState.enemies.countLiving() <= 0)
+
+			if (enemiesToSpawn.length > 0)
 			{
-				spawnTimer.cancel();
-				winTheLevel();
+				var enemyType = enemiesToSpawn.pop();
+				var enemy: FlxSprite = cast CatZimaState.enemies.recycle(enemyType);
+
+				var side = random.int(0, 1);
+				var x = (side == 0) ? -enemy.width : FlxG.width;
+				var y = random.int(0, Math.floor(FlxG.height / 2)) + FlxG.height / 4;
+
+				enemy.reset(x - enemy.width / 2, y - enemy.height / 2);
 			}
+			else
+			{
+				if (CatZimaState.enemies.countLiving() <= 0)
+				{
+					spawnTimer.cancel();
+					winTheLevel();
+				}
+			}
+
+			CatZimaState.musicLevel();
 		}
+	}
 
-		if (!player.alive)
-		{
-			//CatZimaState.restartGame = true;
-			//FlxG.switchState(new AchievementState());
+	function loseTheLevel()
+	{
+		//CatZimaState.restartGame = true;
+		//FlxG.switchState(new AchievementState());
 
-			ChoiceState.reset();
-			FlxG.switchState(new ChoiceState());
-		}
-
-		CatZimaState.musicLevel();
+		//ChoiceState.reset();
+		FlxG.switchState(new StartScreenState());
 	}
 
 	function winTheLevel()
 	{
-		trace("won");
+		//trace("won");
 
 		FlxG.switchState(new ChoiceState());
 	}

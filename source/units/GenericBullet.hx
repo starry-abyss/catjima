@@ -13,11 +13,11 @@ class GenericBullet extends FlxSprite
     public var centerX(get, never): Float;
     public var centerY(get, never): Float;
 
-	public function new(graphic: String)
+	public function new(graphic: String, animated: Bool = false, width: Int = null, height: Int = null)
 	{
 		super();
 
-        loadGraphic("assets/images/units/" + graphic + ".png", false);
+        loadGraphic("assets/images/units/" + graphic + ".png", animated, width, height);
         //updateHitbox();
         //setSize(20, 30);
 

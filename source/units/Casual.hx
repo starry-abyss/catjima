@@ -1,5 +1,7 @@
 package units;
 
+import flixel.FlxObject;
+
 class Casual extends GenericGuy
 {
     public static var graphicString = "blonde";
@@ -9,6 +11,8 @@ class Casual extends GenericGuy
 		super(graphicString);
 
         speed = 50;
+
+        //allowCollisions = FlxObject.NONE;
 	}
 
 	override public function update(elapsed: Float): Void

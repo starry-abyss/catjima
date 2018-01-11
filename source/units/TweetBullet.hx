@@ -6,6 +6,8 @@ class TweetBullet extends GenericBullet
 	{
 		super("tweetShot");
 
+		offset.set(1, 1);
+		setSize(width - 2, height - 2);
 	}
 
 	override public function update(elapsed: Float): Void

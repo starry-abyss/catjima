@@ -13,15 +13,23 @@ class ChoiceState extends CatZimaState
     var player: units.CatZima;
     var choices: Array<ChoiceButton>;
 
-    static var menuId = MENU_CONTROLS;
+    static var menuId = MENU_NARRATIVE;
 
     static inline var MENU_CONTROLS = 0;
     static inline var MENU_HIRING = 1;
     static inline var MENU_NARRATIVE = 2;
+    static inline var MENU_DIALOGUE_1 = 3;
+    static inline var MENU_DIALOGUE_2 = 4;
+    static inline var MENU_GAMEPLAY_1 = 5;
+    static inline var MENU_GAMEPLAY_2 = 6;
+    static inline var MENU_PRE_BOSS = 7;
 
-    static inline var MENU_END = 3;
+    static inline var MENU_END = MENU_PRE_BOSS + 1;
 
     public static var hireBonus = -1;
+    public static var streamerBonus = -1;
+    public static var journalistBonus = -1;
+    public static var dialogueOrGameplay = -1;
 
     var skip = false;
     var blackness: FlxSprite;
@@ -35,6 +43,9 @@ class ChoiceState extends CatZimaState
         menuId = MENU_CONTROLS;
 
         hireBonus = -1;
+        streamerBonus = -1;
+        journalistBonus = -1;
+        dialogueOrGameplay = -1;
     }
 
 	override public function create():Void
@@ -68,11 +79,23 @@ class ChoiceState extends CatZimaState
             
             case MENU_HIRING:
                 text1 = "Выбор 1: Нанять сисадмина\n\nСледствие: Ускорение отправки твитов";
-                text2 = "Выбор 2: Нанять модератора\n\nСледствие: Поднятие уровня сетевого здоровья";
+                text2 = "Выбор 2: Нанять модератора\n\nСледствие: Повышение уровня сетевого здоровья";
             
-            //case MENU_NARRATIVE:
-                //text1 = "Выбор 1: Эксклюзивно на ПК\n\nСледствие: Управление клавиатурой";
-                //text2 = "Выбор 2: Эксклюзивно на консоль\n\nСледствие: Управление геймпадом";
+            case MENU_NARRATIVE:
+                text1 = "Выбор 1: Выбор - через диалоги\n\nСледствие: Хардкорные игроки недовольны";
+                text2 = "Выбор 2: Выбор - через геймплей\n\nСледствие: У знакомых стримеров недовольны зрители";
+            
+           /* case MENU_DIALOGUE_1:
+                text1 = "Выбор 1: Выбор - через диалоги\n\nСледствие: Хардкорные игроки недовольны";
+                text2 = "Выбор 2: Выбор - через геймплей\n\nСледствие: У знакомых стримеров недовольны зрители";*/
+
+            case MENU_DIALOGUE_2:
+                text1 = "Выбор 1: Выпустить игру по плану с багами\n\nСледствие: Поскорее релиз";
+                text2 = "Выбор 2: Отодвинуть релиз из-за багов\n\nСледствие: Попытаемся исправить их";
+            
+            case MENU_PRE_BOSS:
+                text1 = "Выбор 1: Последняя битва\n\nСледствие: Показать ракам, где они зимуют";
+                text2 = "Выбор 2: Сдаться и пойти поспать\n\nСледствие: Сон - лучшее лекарство";
 
             case MENU_END:
                 player.allowMove = false;
@@ -81,8 +104,23 @@ class ChoiceState extends CatZimaState
                 skip = true;
         }
 
-        var choice1 = new ChoiceButton(text1, 0, -5, 10, 1.1/3);
-        var choice2 = new ChoiceButton(text2, 0, 120, 10, 1.1/3);
+        var choice1: ChoiceButton;
+        var choice2: ChoiceButton;
+
+        if (menuId == MENU_PRE_BOSS)
+        {
+            choice1 = new ChoiceButton(text1, 0, -5, 10, 1.1/3, "Slot_red");
+            choice2 = new ChoiceButton(text2, 0, 120, 10, 1.1/3, "Slot_blue");
+
+            if (dialogueOrGameplay == 1)
+                skip = true;
+        }
+        else
+        {
+            choice1 = new ChoiceButton(text1, 0, -5, 10, 1.1/3, null);
+            choice2 = new ChoiceButton(text2, 0, 120, 10, 1.1/3, null);
+        }
+
         choices = [ choice1, choice2 ];
 
         //player.reset(FlxG.width / 2 - player.width / 2, FlxG.height / 2 - player.height / 2);
@@ -130,7 +168,7 @@ class ChoiceState extends CatZimaState
             keyHint2.reset(85, 90);
         }
 
-        CatZimaState.musicMenu();
+        //CatZimaState.musicInter();
 
         blackness = new FlxSprite();
         blackness.makeGraphic(FlxG.width, FlxG.height, 0xff000000);
@@ -182,6 +220,9 @@ class ChoiceState extends CatZimaState
         blackness.visible = (player.waitMoveTimer > 0.0);
         textAnnounce.visible = blackness.visible;
 
+        if (!blackness.visible)
+            CatZimaState.musicInter();
+
         if (skip && !blackness.visible)
             choice = 0;
 
@@ -194,6 +235,7 @@ class ChoiceState extends CatZimaState
 
     function choiceMade(choice: Int)
     {
+        var noIncrement = false;
         switch (menuId)
         {
             case MENU_CONTROLS:
@@ -203,22 +245,64 @@ class ChoiceState extends CatZimaState
                 PlayState.enemiesToSpawn = [units.Casual, units.Casual, units.Casual, units.Casual, units.Casual];
                 BriefingState.hintId = BriefingState.HINT_BLONDE;
 
-                hireBonus = -1;
-
             case MENU_HIRING:
                 hireBonus = choice;
-                PlayState.enemiesToSpawn = [units.Casual, units.Casual, units.Troll, units.Casual, units.Casual, units.Troll, units.Casual, units.Casual, units.Casual];
+                PlayState.enemiesToSpawn = [units.Casual, units.Casual, units.Casual, units.Troll, units.Casual, units.Casual, units.Troll, units.Casual, units.Casual];
+               // PlayState.enemiesToSpawn = [units.Casual, units.Troll, units.Casual, units.Casual, units.Troll];
+                //trace(112233);
                 BriefingState.hintId = BriefingState.HINT_TROLL;
                 
 
             case MENU_NARRATIVE:
-                PlayState.enemiesToSpawn = [units.Casual, units.Hardcore, units.Casual, units.Casual, units.Hardcore, units.Hardcore];
-                BriefingState.hintId = BriefingState.HINT_HARDCORE;
+                dialogueOrGameplay = choice;
+                if (choice == 0)
+                {
+                    PlayState.enemiesToSpawn = [units.Casual, units.Hardcore, units.Casual, units.Casual, units.Hardcore, units.Hardcore];
+                    BriefingState.hintId = BriefingState.HINT_HARDCORE;
+                }
+                else
+                {
+                    PlayState.enemiesToSpawn = [units.Streamer, units.Casual, units.Streamer, units.Casual, units.Casual, units.Streamer];
+                    BriefingState.hintId = BriefingState.HINT_STREAMER;
+                }
+            
+            case MENU_NARRATIVE:
+                if (choice == 0)
+                {
+                    PlayState.enemiesToSpawn = [units.Casual, units.Hardcore, units.Casual, units.Casual, units.Hardcore, units.Hardcore];
+                    BriefingState.hintId = BriefingState.HINT_HARDCORE;
+
+                    menuId = MENU_DIALOGUE_1;
+                }
+                else
+                {
+                    PlayState.enemiesToSpawn = [units.Streamer, units.Casual, units.Streamer, units.Casual, units.Casual, units.Streamer];
+                    BriefingState.hintId = BriefingState.HINT_STREAMER;
+
+                    menuId = MENU_GAMEPLAY_1;
+                }
+
+                noIncrement = true;
+            
+            case MENU_GAMEPLAY_1:
+                if (streamerBonus == -1)
+                    BriefingState.hintId = BriefingState.HINT_STREAMER_KILL;
+                else
+                    BriefingState.hintId = BriefingState.HINT_STREAMER_SAVE;
+
+            case MENU_DIALOGUE_2:
+                if (choice == 0)
+                    journalistBonus = 0;
+                
+                menuId = MENU_PRE_BOSS;
+
+                noIncrement = true;
 
             default: {}
         }
 
-        ++menuId;
+        if (!noIncrement)
+            ++menuId;
 
         FlxG.switchState(new BriefingState());
     }

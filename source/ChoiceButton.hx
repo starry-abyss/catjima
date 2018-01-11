@@ -22,7 +22,7 @@ class ChoiceButton extends FlxGroup
     public var x(default, null): Float;
     public var y(default, null): Float;
 
-	public function new(text: String, x: Int, y: Int, margin: Int, height: Float, iconPath: String = null)
+	public function new(text: String, x: Int, y: Int, margin: Int, height: Float, iconPath: String = null, slotType: String = "Slot")
 	{
 		super();
 
@@ -33,7 +33,7 @@ class ChoiceButton extends FlxGroup
         //background = new FlxSprite();
         //background.makeGraphic(Math.floor(FlxG.width) - margin * 2, Math.floor(FlxG.height * height) - margin * 2, 0xff007700);
         //background.loadGraphic("assets/images/ui/Slot3.png");
-        background = new FlxUI9SliceSprite(0, 0, "assets/images/ui/Slot.png", 
+        background = new FlxUI9SliceSprite(0, 0, 'assets/images/ui/${slotType}.png', 
             new openfl.geom.Rectangle(0, 0, Math.floor(FlxG.width) - margin * 2, Math.floor(FlxG.height * height) - margin * 2), 
             [6, 6, 21, 19], FlxUI9SliceSprite.TILE_BOTH);
         //background.setSize(Math.floor(FlxG.width) - margin * 2, Math.floor(FlxG.height * height) - margin * 2);

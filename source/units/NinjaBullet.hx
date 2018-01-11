@@ -6,6 +6,7 @@ class NinjaBullet extends GenericBullet
 	{
 		super("enemyShot");
 
+		speed = 200.0;
 	}
 
 	override public function update(elapsed: Float): Void

@@ -12,6 +12,9 @@ import flixel.math.FlxMath;
 import flixel.math.FlxRandom;
 import flixel.util.FlxTimer;
 import flixel.system.FlxSound;
+import effects.GenericParticleEffect;
+import units.GenericGuy;
+import effects.GenericEffect;
 
 class CatZimaState extends FlxState
 {
@@ -38,10 +41,17 @@ class CatZimaState extends FlxState
     //public static inline var fontPath = "assets/fonts/UpheavalPro.ttf";
     public static inline var fontPath = "assets/fonts/ps2p/PressStart2P.ttf";
 
-    static var music: FlxSound = null;
-    static var volumeInLevel = 0.7;
+    static var musicBeat: FlxSound = null;
+    static var musicTrack1: FlxSound = null;
+    static var musicTrack2: FlxSound = null;
+
+    static var volumeInLevel = 0.9;
     static var volumeInMenu = 0.5;
-    static var musicInMenu = false;
+    static var musicMode = -1;
+
+    static inline var MUSIC_MENU = 0;
+    static inline var MUSIC_INTER = 1;
+    static inline var MUSIC_LEVEL = 2;
 
     static var random = new FlxRandom();
 
@@ -56,37 +66,60 @@ class CatZimaState extends FlxState
         FlxG.sound.play("assets/sounds/" + name + '${number}.wav', volume);
     }
 
-    static function initMusic(volume: Float)
+    static function initMusic(volume: Array<Float>)
     {
-        if (music == null)
+        if (musicBeat == null)
         {
-            music = new FlxSound();
-            music.loadEmbedded("assets/music/Gaminator.ogg", true, false);
-            music.persist = true;
-            music.volume = volume;
-            music.play();
+            musicBeat = new FlxSound();
+            musicBeat.loadEmbedded("assets/music/Beat.ogg", true, false);
+            musicBeat.persist = true;
+            musicBeat.volume = volume[0];
+            musicBeat.play();
+
+            musicTrack1 = new FlxSound();
+            musicTrack1.loadEmbedded("assets/music/Track1.ogg", true, false);
+            musicTrack1.persist = true;
+            musicTrack1.volume = volume[1];
+            musicTrack1.play();
+
+            musicTrack2 = new FlxSound();
+            musicTrack2.loadEmbedded("assets/music/Track2.ogg", true, false);
+            musicTrack2.persist = true;
+            musicTrack2.volume = volume[2];
+            musicTrack2.play();
             
             return true;
         }
 
-        music.fadeOut(1.0, volume);
+        musicBeat.fadeOut(1.0, volume[0]);
+        musicTrack1.fadeOut(1.0, volume[1]);
+        musicTrack2.fadeOut(1.0, volume[2]);
+
         return false;
     }
 
     public static function musicMenu()
     {
-        if (!musicInMenu)
-            initMusic(volumeInMenu);
+        if (musicMode != MUSIC_MENU)
+            initMusic([0, 0, volumeInMenu]);
         
-        musicInMenu = true;
+        musicMode = MUSIC_MENU;
+    }
+
+    public static function musicInter()
+    {
+        if (musicMode != MUSIC_INTER)
+            initMusic([volumeInMenu, 0, 0]);
+        
+        musicMode = MUSIC_INTER;
     }
 
     public static function musicLevel()
     {
-        if (musicInMenu)
-            initMusic(volumeInLevel);
+        if (musicMode != MUSIC_LEVEL)
+            initMusic([volumeInLevel, volumeInLevel, 0]);
         
-        musicInMenu = false;
+        musicMode = MUSIC_LEVEL;
     }
 
     static public function shootTweetBullet()
@@ -112,11 +145,23 @@ class CatZimaState extends FlxState
         bullet.shoot();
     }
 
-    static public function spawnEffect(effectClass: Class<FlxBasic>, x: Float, y: Float)
+    static public function spawnEffect(effectClass: Class<FlxBasic>, x: Float, y: Float, parent: GenericGuy = null)
     {
-        var effect: FlxSprite = cast effects.recycle(effectClass);
+        var effect = effects.recycle(effectClass);
 
-        effect.reset(x - effect.width / 2, y - effect.height / 2);
+        if (Std.is(effect, FlxSprite))
+        {
+            cast(effect, FlxSprite).reset(x - cast(effect, FlxSprite).width / 2, y - cast(effect, FlxSprite).height / 2);
+            //cast(effect, FlxSprite).flipX = flipX;
+
+            if (parent != null)
+                cast(effect, GenericEffect).parent = parent;
+        }
+        else if (Std.is(effect, GenericParticleEffect))
+        {
+            cast(effect, GenericParticleEffect).reset(x - cast(effect, GenericParticleEffect).width / 2, y - cast(effect, GenericParticleEffect).height / 2);
+        }
+
     }
 
 	override public function create():Void
@@ -166,6 +211,20 @@ class CatZimaState extends FlxState
         b.kill();
     }
 
+    function enemyCollide(?ObjectOrGroup1: FlxBasic, ?ObjectOrGroup2: FlxBasic): Bool
+	{
+        function separate(o1: FlxObject, o2: FlxObject): Bool
+        {
+            if (!Std.is(o1, units.Casual) && !Std.is(o2, units.Casual))
+            {
+                return FlxObject.separateY(o1, o2);
+            }
+            return false;
+        }
+
+		return FlxG.overlap(ObjectOrGroup1, ObjectOrGroup2, null, separate);
+	}
+
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
@@ -177,7 +236,7 @@ class CatZimaState extends FlxState
 
             FlxG.overlap(player, enemies, playerHitByEnemy);
 
-            FlxG.collide(enemies, enemies);
+            enemyCollide(enemies, enemies);
         }
         else
         {
