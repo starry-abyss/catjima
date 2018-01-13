@@ -22,7 +22,10 @@ class TrollParticle extends Particle
 
         scrollFactor.set();
 
-        makeGraphic(6, 6, 0xff00ff00);
+        //makeGraphic(6, 6, 0xff00ff00);
+        loadGraphic("assets/images/effects/Poison Smoke.png", true, 20, 20);
+        animation.add("stand", [0, 1, 2, 3], 8, false);
+        animation.play("stand");
 	}
 }
 
@@ -32,11 +35,13 @@ class TrollCast extends GenericParticleEffect
 	{
 		super(TrollParticle, 30, 30);
 
-        alpha.set(0.5, 0.5, 0.0, 0.0);
+        //alpha.set(0.5, 0.5, 0.0, 0.0);
 
         speed.set(10, 10, 0, 0);
 
-        lifespan.set(1, 1);
+        lifespan.set(0.5, 0.5);
+
+        //loadParticles("assets/images/effects/Poison Smoke.png", 100);
 
         /*scale.start.min.set(1, 1);
         scale.start.max.set(1, 1);

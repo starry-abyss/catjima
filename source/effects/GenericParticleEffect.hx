@@ -28,7 +28,15 @@ class GenericParticleEffect extends FlxTypedEmitter<Particle>
         particleClass = graphic;
         setSize(width, height);
 
-        makeParticles(2, 2, 0xff00ff00, 1);
+        for (i in 0...5)
+        {
+            //var p = new TrollParticle();
+            var p = Type.createInstance(particleClass, []);
+            p.exists = false;
+            add(p);
+        }
+
+        //makeParticles(2, 2, 0xff00ff00, 1);
 
         //alive = false;
 	}
@@ -42,10 +50,11 @@ class GenericParticleEffect extends FlxTypedEmitter<Particle>
 
     override public function revive()
     {
-        super.revive();
+        //super.revive();
 
         //animation.play("stand");
-        start(true, 1, 10);
+        
+        start(true, 1, 5);
     }
 
     /*override function onFinished(): Void
@@ -63,7 +72,7 @@ class GenericParticleEffect extends FlxTypedEmitter<Particle>
 
         if (alive)
         {
-            if (countLiving() <= 1)
+            if (countLiving() <= 0)
             {
                 trace("pf");
 

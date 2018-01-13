@@ -158,7 +158,11 @@ class CatZimaState extends FlxState
             //cast(effect, FlxSprite).flipX = flipX;
 
             if (parent != null)
+            {
                 cast(effect, GenericEffect).parent = parent;
+                cast(effect, GenericEffect).offsetX = x;
+                cast(effect, GenericEffect).offsetY = y;
+            }
         }
         else if (Std.is(effect, GenericParticleEffect))
         {

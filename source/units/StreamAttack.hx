@@ -9,9 +9,12 @@ class StreamAttack extends GenericBullet
 {
 	public function new()
 	{
-		super("tweetShot", true, 11, 12);
+		super("streamerShot", true, 50, 50);
 
-		animation.add("stand", [0/*, 1*/], 3, true);
+		setSize(50, 12);
+		//centerOffsets();
+
+		animation.add("stand", [0, 1], 9, true);
         animation.play("stand");
 	}
 
@@ -61,6 +64,9 @@ class StreamAttack extends GenericBullet
 			}
 
 			var startingX = _point.x;
+			var startingY = _point.y;
+
+			_point.y -= (frameHeight - height) / 2;
 
 			while (Math.abs(_point.x - startingX) < width)
 			{
@@ -86,6 +92,7 @@ class StreamAttack extends GenericBullet
 			}
 
 			_point.x = originalX;
+			_point.y = startingY;
 			//_flashRect.width = originalWidth;
 			//_flashRect.width = width;
 			//else

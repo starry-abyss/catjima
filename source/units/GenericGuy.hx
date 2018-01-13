@@ -28,6 +28,7 @@ class GenericGuy extends FlxSprite
     
 	var invincibleTimer = 0.0;
 
+    var animationSuffix = "";
 
 	public function new(graphic: String)
 	{
@@ -105,13 +106,13 @@ class GenericGuy extends FlxSprite
 
         if (velocity.x != 0.0 || velocity.y != 0.0)
         {
-            if (animation.curAnim.name != "move")
-                animation.play("move", true, animation.frameIndex == 0);
+            if (animation.curAnim.name != "move" + animationSuffix)
+                animation.play("move" + animationSuffix, true, animation.frameIndex == 0);
         }
         else
         {
-            if (animation.curAnim.name != "stand")
-                animation.play("stand", true, animation.frameIndex == 0);
+            if (animation.curAnim.name != "stand" + animationSuffix)
+                animation.play("stand" + animationSuffix, true, animation.frameIndex == 0);
         }
 
         v.put();

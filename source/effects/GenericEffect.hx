@@ -11,6 +11,8 @@ import units.GenericGuy;
 class GenericEffect extends FlxSprite
 {
     public var parent: GenericGuy = null;
+    public var offsetX: Float = 0.0;
+    public var offsetY: Float = 0.0;
 
 	public function new(graphic: String, width: Int, height: Int)
 	{
@@ -41,9 +43,11 @@ class GenericEffect extends FlxSprite
         {
             if (parent.alive)
             {
-                setPosition(parent.centerX - width / 2, parent.centerY - height / 2);
-                
                 flipX = parent.flipX;
+
+                var offsetXApplied = flipX ? -offsetX : offsetX;
+
+                setPosition(parent.centerX - width / 2 + offsetXApplied, parent.centerY - height / 2 + offsetY);
             }
             else
             {

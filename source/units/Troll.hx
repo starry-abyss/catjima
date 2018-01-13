@@ -113,7 +113,7 @@ class Troll extends GenericGuy
 
 							var newEnemy = generateUnit(Type.getClass(enemy), enemy);
 
-							CatZimaState.spawnEffect(effects.TrollCast, newEnemy.centerX, newEnemy.centerY);
+							//CatZimaState.spawnEffect(effects.TrollCast, newEnemy.centerX, newEnemy.centerY);
 
 							ignoreList.push(enemy);
 							ignoreList.push(newEnemy);
@@ -127,7 +127,8 @@ class Troll extends GenericGuy
 
 			//CatZimaState.spawnEffect(effects.TrollCast, centerX, centerY);
 			if (invincibleTimer <= 0)
-				CatZimaState.spawnEffect(effects.TrollFace, centerX, centerY, this);
+				//CatZimaState.spawnEffect(effects.TrollFace, centerX, centerY, this);
+				CatZimaState.spawnEffect(effects.TrollFace, 0, 0, this);
 		}
 
 		super.hurt(amount);
@@ -135,12 +136,14 @@ class Troll extends GenericGuy
 
 	function generateUnit(unitType: Class<GenericGuy>, unitNearby: GenericGuy): GenericGuy
 	{
-		var newEnemy: FlxSprite = cast CatZimaState.enemies.recycle(cast unitType);
+		var newEnemy: GenericGuy = cast CatZimaState.enemies.recycle(cast unitType);
 		var distance = 1.0;
 		var offset = unitNearby.facing == FlxObject.LEFT ? unitNearby.width + unitNearby.width * distance : -distance * unitNearby.width - newEnemy.width;
 
 		newEnemy.reset(unitNearby.x + offset, unitNearby.y);
 		newEnemy.facing = unitNearby.facing;
+
+		CatZimaState.spawnEffect(effects.TrollCast, newEnemy.centerX, newEnemy.centerY);
 
 		return cast newEnemy;
 	}

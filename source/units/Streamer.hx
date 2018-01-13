@@ -7,6 +7,9 @@ class Streamer extends GenericGuy
     public static var graphicString = "streamer";
 
     var bullet: StreamAttack = null;
+    //var effectPrepare: effects.StreamPrepare = null;
+
+    var effectPrepare = false;
 
     var stopShootDuration = 2;
     var shootShift = 0.5;
@@ -47,8 +50,23 @@ class Streamer extends GenericGuy
             //if (standStill(25))
             //    if (shootPrepare())
 
-            if (shootTimer.elapsedTime >= shootRate - stopShootDuration && shootTimer.elapsedTime <= shootRate - stopShootDuration + shootShift)
-            //if (shootTimer.elapsedTime <= shootRate - stopShootDuration)
+
+
+            if (shootTimer.elapsedTime <= shootRate - stopShootDuration)
+            {
+                if (!effectPrepare)
+                {
+                    //var offsetX = facing == FlxObject.LEFT ? frameWidth - bulletSource.x : bulletSource.x;
+
+                    //if (effectPrepare == null)
+                    //{
+                    CatZimaState.spawnEffect(effects.StreamPrepare, 20, 0, this);
+
+                    effectPrepare = true;
+                    //}
+                }
+            }
+            else if (shootTimer.elapsedTime >= shootRate - stopShootDuration && shootTimer.elapsedTime <= shootRate - stopShootDuration + shootShift)
             {
                 if (bullet == null)
                 {
@@ -56,8 +74,8 @@ class Streamer extends GenericGuy
 
                     // this bullet type's width is adjustable
                     bullet.width = FlxG.width;
-                    bullet.offset.set(-0.5 * (bullet.width - bullet.frameWidth), -0.5 * (bullet.height - bullet.frameHeight));
-                    bullet.centerOrigin();
+                    //bullet.offset.set(-0.5 * (bullet.width - bullet.frameWidth), -0.5 * (bullet.height - bullet.frameHeight));
+                    //bullet.centerOrigin();
 
                     //shootBullet(bullet);
                     //bullet.shootPlayer();
@@ -71,6 +89,7 @@ class Streamer extends GenericGuy
             else
             {
                 killBullet();
+                effectPrepare = false;
             }
 
             if (bullet != null)
@@ -108,6 +127,14 @@ class Streamer extends GenericGuy
 
             bullet = null;
         }
+
+        /*if (effectPrepare != null)
+        {
+            effectPrepare.exists = false;
+            effectPrepare.alive = false;
+
+            effectPrepare = null;
+        }*/
     }
 
     public function softKill()
