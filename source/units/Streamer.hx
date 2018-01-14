@@ -63,6 +63,8 @@ class Streamer extends GenericGuy
                     CatZimaState.spawnEffect(effects.StreamPrepare, 20, 0, this);
 
                     effectPrepare = true;
+
+                    CatZimaState.playSoundRandom("stream_prepare", 0.6, 3);
                     //}
                 }
             }
@@ -83,7 +85,7 @@ class Streamer extends GenericGuy
                     // always zero velocity
                     velocity.set();
 
-                    CatZimaState.playSoundRandom("ninja_shoot", 1.0, 3);
+                    CatZimaState.playSoundChunkRandom("streamer_beam", 0.6, shootRate - stopShootDuration);
                 }
             }
             else
@@ -161,6 +163,7 @@ class Streamer extends GenericGuy
         super.revive();
 
         allowCollisions = FlxObject.ANY;
+        effectPrepare = false;
     }
 
     override public function kill()
@@ -169,7 +172,7 @@ class Streamer extends GenericGuy
 
         if (alive)
         {
-            CatZimaState.playSoundRandom("ninja_die", 1.0, 3);
+            CatZimaState.playSoundRandom("streamer_die", 1.0, 3);
         }
 
         super.kill();

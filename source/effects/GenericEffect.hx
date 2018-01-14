@@ -52,6 +52,8 @@ class GenericEffect extends FlxSprite
             else
             {
                 parent = null;
+
+                kill();
             }
         }
 	}

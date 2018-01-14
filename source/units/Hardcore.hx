@@ -12,7 +12,7 @@ class Hardcore extends GenericGuy
         overrideSpeedY = 75;
         shootRate = 3;
 
-        var vulnerableAnimation = [0, 2, 3, 1];
+        var vulnerableAnimation = [2, 3, 2, 1];
 
         animation.add("stand2", vulnerableAnimation, 2, true);
         animation.add("move2", vulnerableAnimation, 2, true);

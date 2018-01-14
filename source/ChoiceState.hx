@@ -13,19 +13,20 @@ class ChoiceState extends CatZimaState
     var player: units.CatZima;
     var choices: Array<ChoiceButton>;
 
-    static var menuId = MENU_NARRATIVE;
+    static var menuId = MENU_BUGS;
 
     static inline var MENU_CONTROLS = 0;
     static inline var MENU_HIRING = 1;
     static inline var MENU_NARRATIVE = 2;
     static inline var MENU_DIALOGUE_1 = 3;
-    static inline var MENU_DIALOGUE_2 = 4;
+    //static inline var MENU_DIALOGUE_2 = 4;
     static inline var MENU_GAMEPLAY_1 = 5;
-    static inline var MENU_GAMEPLAY_2 = 6;
-    //static inline var MENU_BUGS = 7;
+    //static inline var MENU_GAMEPLAY_2 = 6;
+    static inline var MENU_BUGS = 7;
     static inline var MENU_PRE_BOSS = 8;
+    static inline var MENU_BOSS = 9;
 
-    static inline var MENU_END = MENU_PRE_BOSS + 1;
+    static inline var MENU_END = MENU_BOSS + 1;
 
     public static var hireBonus = -1;
     public static var streamerBonus = -1;
@@ -92,11 +93,11 @@ class ChoiceState extends CatZimaState
                 text1 = "Выбор 1: Строгий сюжет\n\nСледствие: Короткая лаконичная игра";
                 text2 = "Выбор 2: Опциональные квесты\n\nСледствие: Полнота истории и ощущений";
 
-            case MENU_DIALOGUE_2:
-                text1 = "Выбор 1: Выпустить игру по плану с багами\n\nСледствие: Поскорее релиз";
+            case MENU_BUGS:
+                text1 = "Выбор 1: Выпустить игру по графику, но с багами\n\nСледствие: Поскорее релиз";
                 text2 = "Выбор 2: Отодвинуть релиз из-за багов\n\nСледствие: Попытаемся исправить их";
             
-            case MENU_PRE_BOSS:
+            case MENU_BOSS:
                 text1 = "Выбор 1: Последняя битва\n\nСледствие: Показать ракам, где они зимуют";
                 text2 = "Выбор 2: Сдаться и пойти поспать\n\nСледствие: Сон - лучшее лекарство";
 
@@ -110,10 +111,10 @@ class ChoiceState extends CatZimaState
         var choice1: ChoiceButton;
         var choice2: ChoiceButton;
 
-        if (menuId == MENU_PRE_BOSS)
+        if (menuId == MENU_BOSS)
         {
-            choice1 = new ChoiceButton(text1, 0, -5, 10, 1.1/3, "Slot_red");
-            choice2 = new ChoiceButton(text2, 0, 120, 10, 1.1/3, "Slot_blue");
+            choice1 = new ChoiceButton(text1, 0, -5, 10, 1.1/3, null, "Slot_red");
+            choice2 = new ChoiceButton(text2, 0, 120, 10, 1.1/3, null, "Slot_blue");
 
             if (dialogueOrGameplay == 1)
                 skip = true;
@@ -220,13 +221,15 @@ class ChoiceState extends CatZimaState
             }
         }
 
-        blackness.visible = (player.waitMoveTimer > 0.0);
+        var endTimer = (player.waitMoveTimer <= 0.0);
+
+        blackness.visible = !endTimer || skip;
         textAnnounce.visible = blackness.visible;
 
         if (!blackness.visible)
             CatZimaState.musicInter();
 
-        if (skip && !blackness.visible)
+        if (skip && endTimer)
             choice = 0;
 
         if (choice >= 0)
@@ -239,6 +242,10 @@ class ChoiceState extends CatZimaState
     function choiceMade(choice: Int)
     {
         var noIncrement = false;
+        var reset = false;
+
+        PlayState.enemiesToSpawn = [];
+
         switch (menuId)
         {
             case MENU_CONTROLS:
@@ -276,38 +283,86 @@ class ChoiceState extends CatZimaState
                 noIncrement = true;
 
             case MENU_GAMEPLAY_1:
-                if (streamerBonus == -1)
+                dialogueOrGameplay = 1;
+                /*if (streamerBonus == -1)
                     BriefingState.hintId = BriefingState.HINT_STREAMER_KILL;
                 else
-                    BriefingState.hintId = BriefingState.HINT_STREAMER_SAVE;
+                    BriefingState.hintId = BriefingState.HINT_STREAMER_SAVE;*/
+
+                BriefingState.hintId = BriefingState.HINT_IDEA;
 
                 PlayState.enemiesToSpawn = [units.Casual, units.Troll, units.Streamer, units.Casual, 
                     units.Casual, units.Troll, units.Streamer, units.Streamer, units.Casual, 
                     units.Casual, units.Troll, units.Streamer, units.Casual];
 
+                menuId = MENU_PRE_BOSS;
+                noIncrement = true;
+
             case MENU_DIALOGUE_1:
+                dialogueOrGameplay = 0;
+
                 PlayState.enemiesToSpawn = [units.Casual, units.Troll, units.Hardcore, units.Casual, 
                     units.Casual, units.Troll, units.Hardcore, units.Hardcore, units.Casual, 
                     units.Casual, units.Troll, units.Hardcore, units.Casual];
+
+                BriefingState.hintId = BriefingState.HINT_IDEA;
                 
                 bonusLevelOrNot = choice;
+                menuId = MENU_BUGS;
+                noIncrement = true;
             
-            case MENU_DIALOGUE_2:
+            case MENU_BUGS:
+                dialogueOrGameplay = 0;
+
                 if (choice == 0)
                 {
                     journalistBonus = 0;
-                    menuId = MENU_PRE_BOSS;
+                    reset = true;
                 }
                 else if (bonusLevelOrNot == 0)
                 {
-                    menuId = MENU_PRE_BOSS;
+                    journalistBonus = 1;
+                    reset = true;
                 }
                 else
                 {
-                    //menuId = MENU_BUGS;
+                    // journalistBonus = 1 too, but only after beating the level
+                    PlayState.enemiesToSpawn = [ units.Bug, units.Bug, units.Bug, units.Bug, units.Bug, units.Bug ];
                 }
 
+                BriefingState.hintId = BriefingState.HINT_BUG;
+
+                menuId = MENU_PRE_BOSS;
                 noIncrement = true;
+
+            case MENU_PRE_BOSS:
+                if (dialogueOrGameplay == 1)
+                {
+                    if (streamerBonus == -1)
+                        BriefingState.hintId = BriefingState.HINT_STREAMER_KILL;
+                    else
+                        BriefingState.hintId = BriefingState.HINT_STREAMER_SAVE;
+                }
+                else if (journalistBonus == 1)
+                {
+                    BriefingState.hintId = BriefingState.HINT_JOURNALIST;
+                }
+                else
+                {
+                    BriefingState.hintId = BriefingState.HINT_NO_JOURNALIST;
+                }
+
+            case MENU_BOSS:
+                if (choice == 0)
+                {
+                    BriefingState.hintId = BriefingState.HINT_BOSS;
+                    // PlayState.enemiesToSpawn = [ units.Boss ];
+                }
+                else
+                {
+                    FlxG.switchState(new StartScreenState());
+                    return;
+                }
 
             default: {}
         }
@@ -315,7 +370,10 @@ class ChoiceState extends CatZimaState
         if (!noIncrement)
             ++menuId;
 
-        FlxG.switchState(new BriefingState());
+        if (!reset)
+            FlxG.switchState(new BriefingState());
+        else
+            FlxG.resetState();
     }
 
 }

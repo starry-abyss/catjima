@@ -22,6 +22,10 @@ class PlayState extends CatZimaState
 	var backgrounds = new FlxGroup();
 	var foregrounds = new FlxGroup();
 
+	var programmers = new FlxGroup();
+	var blogs = new FlxGroup();
+	var commits = new FlxGroup();
+
 	var player: units.CatZima;
 
 	var spawnTimer: FlxTimer;
@@ -29,6 +33,9 @@ class PlayState extends CatZimaState
 	var random = new FlxRandom();
 
 	var playerHealth: FlxTilemap;
+
+	var bossLevel = false;
+	var bugLevel = false;
 
 	static public var enemiesToSpawn: Array<Class<FlxBasic>> = [];
 
@@ -50,9 +57,14 @@ class PlayState extends CatZimaState
 		
 		player = CatZimaState.player;
 
-		backgrounds.add(new Backdrop("assets/images/background.png"));
-		backgrounds.add(new Backdrop("assets/images/plane4.png"));
-		backgrounds.add(new Backdrop("assets/images/plane3.png"));
+		var logo_full = new FlxSprite();
+        logo_full.loadGraphic("assets/images/GAMINATOR.png");
+        logo_full.scrollFactor.set();
+        add(logo_full);
+
+		backgrounds.add(new Backdrop("assets/images/background.png", 1, 1, true, false));
+		backgrounds.add(new Backdrop("assets/images/plane4.png", 1, 1, true, false));
+		backgrounds.add(new Backdrop("assets/images/plane3.png", 1, 1, true, false));
 
 		foregrounds.add(new Backdrop("assets/images/plane2.png"));
 		foregrounds.add(new Backdrop("assets/images/plane1.png"));
@@ -95,6 +107,108 @@ class PlayState extends CatZimaState
 		playerHealth.scrollFactor.set();
 		playerHealth.setPosition(2, 2);
 		add(playerHealth);
+
+		
+		if (PlayState.enemiesToSpawn.length == 0)
+		{
+			winTheLevel();
+			//return;
+		}
+		else
+		{
+			if (PlayState.enemiesToSpawn[0] == units.Bug)
+			{
+				bugLevel = true;
+				ChoiceState.journalistBonus = 1;
+
+				var names = [ "@apg_rt", "@2ebacbac", "@ultraCodz" ];
+
+				for (i in 0...3)
+				{
+					var programmer = new ChoiceButton(names[i], 2 + 89 * i, 137, 10, 1/3.7, null, "Slot_blue", 1/2.3);
+					//programmer.width = 100;
+					//programmer
+
+					programmers.add(programmer);
+
+
+					var blog = new FlxSprite(60 + 89 * i, 130);
+					blog.loadGraphic("assets/images/ui/blog.png", false);
+					blog.updateHitbox();
+
+					blog.scrollFactor.set();
+
+					blogs.add(blog);
+				}
+
+				add(programmers);
+				add(commits);
+				add(blogs);
+
+				addCommitMessage("Вот оно что!");
+				addCommitMessage("Фикс");
+				addCommitMessage("вроде так.");
+				addCommitMessage("достал кот");
+				addCommitMessage("попытка 2");
+				addCommitMessage("Завтра в отпуск");
+				addCommitMessage("Забыл умножить");
+				//addCommitMessage("со stack overflow");
+			}
+			else if (PlayState.enemiesToSpawn[0] == units.Boss)
+			{
+				bossLevel = true;
+			}
+		}
+	}
+
+	function addCommitMessage(text: String)
+	{
+		var commit = new ChoiceButton("git commit -m \n\"" + text + "\"", 0, 0, 10, 1/2.4, null, "Slot_red", 1/2.7);
+
+		commit.speed = 50;
+		commit.kill();
+
+		commits.add(commit);
+	}
+
+	function callProgrammer(bullet, programmerBlog)
+	{
+		bullet.kill();
+
+		programmerBlog.kill();
+		var timer = new FlxTimer(CatZimaState.timerManager);
+		timer.start(1.5, function (_) programmerBlog.revive(), 1);
+
+		if (commits.countDead() > 0)
+		{
+			var commit: ChoiceButton = cast commits.recycle();
+			commit.moveTo(programmerBlog.x - 50, programmerBlog.y);
+			commit.time = 0.0;
+		}
+	}
+
+	function smashBug(bug: FlxBasic, commit: FlxBasic)
+	{
+		/*trace(Type.typeof(bug));
+		trace(Type.typeof(commit));
+
+		if (cast(commit, ChoiceButton).alpha < 0.2)
+			//return false;
+			return;*/
+
+		var oops: FlxSprite = cast backgrounds.getFirstAlive();
+		if (oops != null)
+		{
+			oops.alive = false;
+			oops.velocity.y = 50;
+
+			FlxG.camera.shake(0.005, 0.5);
+		}
+
+		bug.kill();
+		commit.kill();
+
+		//return true;
 	}
 
 	function spawnEnemy(_)
@@ -155,6 +269,20 @@ class PlayState extends CatZimaState
 		var hp = Math.ceil(player.health);
 		for (i in 0...playerHealth.widthInTiles)
 			playerHealth.setTile(i, 0, i >= hp ? 0 : 1, true);
+
+		if (bugLevel)
+		{
+			FlxG.overlap(CatZimaState.playerBullets, blogs, callProgrammer);
+			FlxG.overlap(CatZimaState.enemies, commits, smashBug);
+
+			/*for (c in commits)
+			{
+				if (c.alive)
+				{
+					FlxG.overlap(CatZimaState.enemies, c, smashBug);
+				}
+			}*/
+		}
 
 		/*if (CatZimaState.enemies.countLiving() <= 0)
 		{

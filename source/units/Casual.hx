@@ -32,7 +32,7 @@ class Casual extends GenericGuy
     override public function kill()
     {
         if (alive)
-            CatZimaState.playSoundRandom("kiss", 1.0, 3);
+            CatZimaState.playSoundRandom("kiss", 0.8, 3);
 
         super.kill();
     }

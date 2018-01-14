@@ -19,10 +19,14 @@ class ChoiceButton extends FlxGroup
 
     var margin = 0;
 
+    public var speed: Int = 0;
+
     public var x(default, null): Float;
     public var y(default, null): Float;
+    public var alpha: Float = 1.0;
+    public var time: Float = 0.0;
 
-	public function new(text: String, x: Int, y: Int, margin: Int, height: Float, iconPath: String = null, slotType: String = "Slot")
+	public function new(text: String, x: Int, y: Int, margin: Int, height: Float, iconPath: String = null, slotType: String = "Slot", width: Float = 1.0)
 	{
 		super();
 
@@ -34,7 +38,7 @@ class ChoiceButton extends FlxGroup
         //background.makeGraphic(Math.floor(FlxG.width) - margin * 2, Math.floor(FlxG.height * height) - margin * 2, 0xff007700);
         //background.loadGraphic("assets/images/ui/Slot3.png");
         background = new FlxUI9SliceSprite(0, 0, 'assets/images/ui/${slotType}.png', 
-            new openfl.geom.Rectangle(0, 0, Math.floor(FlxG.width) - margin * 2, Math.floor(FlxG.height * height) - margin * 2), 
+            new openfl.geom.Rectangle(0, 0, Math.floor(FlxG.width * width) - margin * 2, Math.floor(FlxG.height * height) - margin * 2), 
             [6, 6, 21, 19], FlxUI9SliceSprite.TILE_BOTH);
         //background.setSize(Math.floor(FlxG.width) - margin * 2, Math.floor(FlxG.height * height) - margin * 2);
         background.scrollFactor.set();
@@ -101,6 +105,25 @@ class ChoiceButton extends FlxGroup
 
 	override public function update(elapsed: Float): Void
 	{
+        if (speed != 0)
+        {
+            moveTo(x, y - speed * elapsed);
+
+            if (!background.isOnScreen())
+                kill();
+            
+           /* alpha += elapsed * 0.5;
+            if (alpha > 1)
+                alpha = alpha % 1;*/
+
+            /*time += elapsed;
+            alpha = Math.cos(time * 3) * 0.5 + 0.5;
+            
+            background.alpha = alpha;
+            //icon.alpha = alpha;
+            description.alpha = alpha;*/
+        }
+
 		super.update(elapsed);
 
 	}

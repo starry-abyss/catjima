@@ -11,6 +11,7 @@ import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
 import flixel.math.FlxRandom;
 import flixel.util.FlxTimer;
+import flixel.tweens.FlxTween;
 import flixel.system.FlxSound;
 import effects.GenericParticleEffect;
 import units.GenericGuy;
@@ -57,13 +58,38 @@ class CatZimaState extends FlxState
 
     public static function playSound(name: String, volume: Float = 1.0)
     {
-        FlxG.sound.play("assets/sounds/" + name + ".wav", volume);
+        var sound = FlxG.sound.play("assets/sounds/" + name + ".wav", volume);
+        sound.persist = true;
     }
 
     public static function playSoundRandom(name: String, volume: Float, max: Int)
     {
         var number = random.int(1, max);
         FlxG.sound.play("assets/sounds/" + name + '${number}.wav', volume);
+    }
+
+    public static function playSoundChunkRandom(name: String, volume: Float, length: Float)
+    {
+        //var sound = FlxG.sound.play("assets/sounds/" + name + ".wav", volume);
+        var sound = new FlxSound();
+        sound.loadEmbedded("assets/sounds/" + name + ".wav", false, true);
+        //sound.persist = false;
+        //sound.pause();
+
+        var startingPos = Math.floor(random.float(0.0, sound.length - length * 1000));
+
+        //trace(startingPos * 1000, (startingPos + length) * 1000, length * 1000);
+
+        //sound.resume();
+        sound.play(false, startingPos, startingPos + length * 1000);
+
+        // workaround for endTime not working, also enveloping
+        sound.volume = 0.0;
+        var attack = 0.1;
+        var release = 0.1;
+        FlxTween.tween(sound, { volume: volume }, attack)
+            .wait(length - attack - release)
+            .then(FlxTween.tween(sound, { volume: 0 }, release, { onComplete: function (_) sound.stop() }));
     }
 
     static function initMusic(volume: Array<Float>)
@@ -212,7 +238,7 @@ class CatZimaState extends FlxState
         {
             cast(e, units.Streamer).softKill();
         }
-        else
+        else if (!Std.is(e, units.Bug))
         {
             cast(p, units.GenericGuy).onTouch();
             cast(e, units.GenericGuy).onTouch();
@@ -221,8 +247,11 @@ class CatZimaState extends FlxState
 
     function enemyHitByBullet(e, b)
     {
-        e.hurt(1);
-        b.kill();
+        if (!Std.is(e, units.Bug))
+        {
+            e.hurt(1);
+            b.kill();
+        }
     }
 
     function enemyCollide(?ObjectOrGroup1: FlxBasic, ?ObjectOrGroup2: FlxBasic): Bool

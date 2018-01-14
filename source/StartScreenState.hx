@@ -69,6 +69,8 @@ class StartScreenState extends FlxState
 
         if (FlxG.keys.anyJustPressed(["ENTER"]) || FlxG.gamepads.anyJustPressed(START))
 		{
+            CatZimaState.playSound("confirm1", 1.0);
+
             if (!introRead)
             {
                 introRead = true;

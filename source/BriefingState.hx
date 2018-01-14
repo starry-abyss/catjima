@@ -24,7 +24,9 @@ class BriefingState extends CatZimaState
     public static inline var HINT_STREAMER_SAVE = 5;
     public static inline var HINT_STREAMER_KILL = 6;
     public static inline var HINT_JOURNALIST = 7;
-    public static inline var HINT_BOSS = 7;
+    public static inline var HINT_BOSS = 8;
+    public static inline var HINT_IDEA = 9;
+    public static inline var HINT_NO_JOURNALIST = 10;
 
 	override public function create():Void
 	{
@@ -58,13 +60,19 @@ class BriefingState extends CatZimaState
                 hint = new ChoiceButton("Спасенный стример понял, что был не прав, отблагодарил, что вы с ним мягко обошлись, и разблокировал вам смайлик с сердечком.", 0, 0, 10, 4/9, null);
             
             case HINT_STREAMER_KILL:
-                hint = new ChoiceButton("После грубых разборок стримеры сильно обижены. Но зато на Гамине написали обзор вашей игры и сравнили её с Dark Souls.", 0, 0, 10, 4/9, null);
+                hint = new ChoiceButton("После грубых разборок стримеры сильно обижены. Но зато на Гамине написали обзор вашей игры и сравнили её с Dark Souls.", 0, 0, 10, 4/9, "units/streamer");
             
             case HINT_JOURNALIST:
                 hint = new ChoiceButton("Журналисты благодарят вас, что баги исправлены, и просят друзей в Твиттере увеличить длину сообщений в 2 раза.", 0, 0, 10, 4/9, null);
+            
+            case HINT_NO_JOURNALIST:
+                hint = new ChoiceButton("Журналисты недовольны багами и пишут негативные рецензии. Но зато на Гамине написали обзор вашей игры и сравнили её с Dark Souls.", 0, 0, 10, 4/9, "units/bug");
 
             case HINT_BOSS:
-                hint = new ChoiceButton("Недоволен, что вы ещё живы: агент Смит.\n\nЭто точно его происки! Он искажает сознание пользователей!", 0, 0, 10, 4/9, null);
+                hint = new ChoiceButton("Недоволен, что вы ещё живы: агент Смит.\n\nЭто точно его происки! Он искажает сознание пользователей!", 0, 0, 10, 4/9, "units/boss");
+
+            case HINT_IDEA:
+                hint = new ChoiceButton("Кот Зúма:\n\n\"А дай-ка я выложу фото обнимашек с роботом!\"", 0, 0, 10, 4/9, "units/sdf");
 
             default: {}
         }
@@ -77,6 +85,13 @@ class BriefingState extends CatZimaState
 
         startButton = new ChoiceButton("Blog", Math.floor(FlxG.width * 3 / 4 - 50), Math.floor(FlxG.height * 3 / 4 - 50), 10, 1/3);
 
+
+        var blog = new FlxSprite(startButton.x + 60, startButton.y + 15);
+        blog.loadGraphic("assets/images/ui/blog.png", false);
+        blog.updateHitbox();
+        blog.scrollFactor.set();
+
+
         player.reset(Math.floor(FlxG.width * 1 / 4 - player.width / 2), Math.floor(FlxG.height * 3 / 4 - player.height / 2 - 20));
 		
         for (c in choices)
@@ -85,6 +100,7 @@ class BriefingState extends CatZimaState
         }
 
         add(startButton);
+        add(blog);
 
         add(player);
         add(CatZimaState.playerBullets);

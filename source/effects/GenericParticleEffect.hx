@@ -74,7 +74,7 @@ class GenericParticleEffect extends FlxTypedEmitter<Particle>
         {
             if (countLiving() <= 0)
             {
-                trace("pf");
+                //trace("pf");
 
                 kill();
             }
