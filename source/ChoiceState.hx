@@ -13,7 +13,7 @@ class ChoiceState extends CatZimaState
     var player: units.CatZima;
     var choices: Array<ChoiceButton>;
 
-    static var menuId = MENU_BUGS;
+    static var menuId = MENU_BOSS;
 
     static inline var MENU_CONTROLS = 0;
     static inline var MENU_HIRING = 1;
@@ -56,6 +56,8 @@ class ChoiceState extends CatZimaState
 	{
 		super.create();
 
+        AchievementState.init();
+
         skip = false;
 
         var background = new FlxSprite();
@@ -94,8 +96,8 @@ class ChoiceState extends CatZimaState
                 text2 = "Выбор 2: Опциональные квесты\n\nСледствие: Полнота истории и ощущений";
 
             case MENU_BUGS:
-                text1 = "Выбор 1: Выпустить игру по графику, но с багами\n\nСледствие: Поскорее релиз";
-                text2 = "Выбор 2: Отодвинуть релиз из-за багов\n\nСледствие: Попытаемся исправить их";
+                text1 = "Выбор 1: Релиз по графику, но с багами\n\nСледствие: Баги исправим потом";
+                text2 = "Выбор 2: Отодвинуть релиз из-за багов\n\nСледствие: Погнали исправлять";
             
             case MENU_BOSS:
                 text1 = "Выбор 1: Последняя битва\n\nСледствие: Показать ракам, где они зимуют";
@@ -353,10 +355,12 @@ class ChoiceState extends CatZimaState
                 }
 
             case MENU_BOSS:
+                noIncrement = true;
+
                 if (choice == 0)
                 {
                     BriefingState.hintId = BriefingState.HINT_BOSS;
-                    // PlayState.enemiesToSpawn = [ units.Boss ];
+                    PlayState.enemiesToSpawn = [ units.Boss ];
                 }
                 else
                 {

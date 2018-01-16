@@ -205,6 +205,7 @@ class CatZimaState extends FlxState
 
 		FlxG.camera.pixelPerfectRender = true;
 		FlxG.worldDivisions = 1;
+        FlxG.fixedTimestep = false;
 
         player = new units.CatZima();
 
@@ -254,6 +255,15 @@ class CatZimaState extends FlxState
         }
     }
 
+    function bulletByBullet(b1, b2)
+    {
+        if (!Std.is(b1, units.StreamAttack))
+            b1.kill();
+
+        if (!Std.is(b2, units.StreamAttack))
+            b2.kill();
+    }
+
     function enemyCollide(?ObjectOrGroup1: FlxBasic, ?ObjectOrGroup2: FlxBasic): Bool
 	{
         function separate(o1: FlxObject, o2: FlxObject): Bool
@@ -276,6 +286,8 @@ class CatZimaState extends FlxState
         {
             FlxG.overlap(player, enemyBullets, playerHitByBullet);
             FlxG.overlap(enemies, playerBullets, enemyHitByBullet);
+
+            FlxG.overlap(enemyBullets, playerBullets, bulletByBullet);
 
             FlxG.overlap(player, enemies, playerHitByEnemy);
 

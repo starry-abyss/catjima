@@ -103,11 +103,22 @@ class ChoiceButton extends FlxGroup
         return background.overlaps(object);
     }
 
+    public function disableCollision()
+    {
+        background.allowCollisions = FlxObject.NONE;
+
+        if (icon != null)
+            icon.allowCollisions = FlxObject.NONE;
+
+        description.allowCollisions = FlxObject.NONE;
+    }
+
 	override public function update(elapsed: Float): Void
 	{
         if (speed != 0)
         {
             moveTo(x, y - speed * elapsed);
+            //moveTo(x + speed * elapsed, y - speed * elapsed);
 
             if (!background.isOnScreen())
                 kill();

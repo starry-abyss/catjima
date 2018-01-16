@@ -64,7 +64,8 @@ class CatZima extends GenericGuy
     {
         if (invincibleTimer <= 0)
 		{
-			CatZimaState.playSoundRandom("hit", 1.0, 3);
+			if (amount > 0)
+				CatZimaState.playSoundRandom("hit", 1.0, 3);
 		}
         
 		super.hurt(amount);

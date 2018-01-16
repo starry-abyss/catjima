@@ -22,12 +22,12 @@ class StreamAttack extends GenericBullet
 	{
 		super.update(elapsed);
 
-		FlxG.overlap(this, CatZimaState.playerBullets, 
+		/*FlxG.overlap(this, CatZimaState.playerBullets, 
 				function (eb, pb)
 				{
 					pb.kill();
 				}
-			);
+			);*/
     }
 
 	override public function kill()

@@ -57,7 +57,7 @@ class BriefingState extends CatZimaState
                 hint = new ChoiceButton("Недоволен выбором: Стример\n\nСчитает, что его зрителям не понравится это изменение.", 0, 0, 10, 4/9, "units/streamer");
 
             case HINT_STREAMER_SAVE:
-                hint = new ChoiceButton("Спасенный стример понял, что был не прав, отблагодарил, что вы с ним мягко обошлись, и разблокировал вам смайлик с сердечком.", 0, 0, 10, 4/9, null);
+                hint = new ChoiceButton("Спасенный стример понял, что был не прав, отблагодарил, что вы с ним мягко обошлись, и разблокировал вам смайлик с сердечком.", 0, 0, 10, 4/9, "units/health");
             
             case HINT_STREAMER_KILL:
                 hint = new ChoiceButton("После грубых разборок стримеры сильно обижены. Но зато на Гамине написали обзор вашей игры и сравнили её с Dark Souls.", 0, 0, 10, 4/9, "units/streamer");
@@ -66,10 +66,10 @@ class BriefingState extends CatZimaState
                 hint = new ChoiceButton("Журналисты благодарят вас, что баги исправлены, и просят друзей в Твиттере увеличить длину сообщений в 2 раза.", 0, 0, 10, 4/9, null);
             
             case HINT_NO_JOURNALIST:
-                hint = new ChoiceButton("Журналисты недовольны багами и пишут негативные рецензии. Но зато на Гамине написали обзор вашей игры и сравнили её с Dark Souls.", 0, 0, 10, 4/9, "units/bug");
+                hint = new ChoiceButton("Журналисты не могут пройти игру из-за багов. А те, кто-таки смог, пишут негативные рецензии.", 0, 0, 10, 4/9, "units/bug");
 
             case HINT_BOSS:
-                hint = new ChoiceButton("Недоволен, что вы ещё живы: агент Смит.\n\nЭто точно его происки! Он искажает сознание пользователей!", 0, 0, 10, 4/9, "units/boss");
+                hint = new ChoiceButton("Недоволен, что вы ещё живы: Агент Смит\n\nЭто точно его происки! Он искажает сознание пользователей!", 0, 0, 10, 4/9, "units/boss");
 
             case HINT_IDEA:
                 hint = new ChoiceButton("Кот Зúма:\n\n\"А дай-ка я выложу фото обнимашек с роботом!\"", 0, 0, 10, 4/9, "units/sdf");
@@ -83,7 +83,7 @@ class BriefingState extends CatZimaState
 
         player = CatZimaState.player;
 
-        startButton = new ChoiceButton("Blog", Math.floor(FlxG.width * 3 / 4 - 50), Math.floor(FlxG.height * 3 / 4 - 50), 10, 1/3);
+        startButton = new ChoiceButton("Блог", Math.floor(FlxG.width * 3 / 4 - 50), Math.floor(FlxG.height * 3 / 4 - 50), 10, 1/3);
 
 
         var blog = new FlxSprite(startButton.x + 60, startButton.y + 15);

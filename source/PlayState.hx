@@ -25,6 +25,8 @@ class PlayState extends CatZimaState
 	var programmers = new FlxGroup();
 	var blogs = new FlxGroup();
 	var commits = new FlxGroup();
+	
+	var healthPacks = new FlxGroup();
 
 	var player: units.CatZima;
 
@@ -33,9 +35,12 @@ class PlayState extends CatZimaState
 	var random = new FlxRandom();
 
 	var playerHealth: FlxTilemap;
+	var bossHealth: FlxTilemap;
 
 	var bossLevel = false;
 	var bugLevel = false;
+
+	var boss: units.Boss = null;
 
 	static public var enemiesToSpawn: Array<Class<FlxBasic>> = [];
 
@@ -52,6 +57,8 @@ class PlayState extends CatZimaState
 	override public function create(): Void
 	{
 		super.create();
+
+		persistentUpdate = true;
 
 		spawnTimer = new FlxTimer(CatZimaState.timerManager);
 		
@@ -81,6 +88,10 @@ class PlayState extends CatZimaState
 
 		add(backgrounds);
 
+		add(commits);
+
+		add(healthPacks);
+
 		add(CatZimaState.enemies);
 
 		//player = new units.CatZima();
@@ -103,10 +114,17 @@ class PlayState extends CatZimaState
 
 
 		playerHealth = new FlxTilemap();
-		playerHealth.loadMapFromArray([1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 10, 1, "assets/images/ui/HUD HPHero.png", 23, 16, null, 1);
+		playerHealth.loadMapFromArray([1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], 12, 1, "assets/images/ui/HUD HPHero.png", 23, 16, null, 1);
 		playerHealth.scrollFactor.set();
 		playerHealth.setPosition(2, 2);
 		add(playerHealth);
+
+
+		bossHealth = new FlxTilemap();
+		bossHealth.loadMapFromArray([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 12, 1, "assets/images/ui/HUD HP Boss.png", 23, 16, null, 1);
+		bossHealth.scrollFactor.set();
+		bossHealth.setPosition(2, FlxG.height - 18);
+		add(bossHealth);
 
 		
 		if (PlayState.enemiesToSpawn.length == 0)
@@ -142,11 +160,10 @@ class PlayState extends CatZimaState
 				}
 
 				add(programmers);
-				add(commits);
 				add(blogs);
 
 				addCommitMessage("Вот оно что!");
-				addCommitMessage("Фикс");
+				addCommitMessage("Это - фича", true);
 				addCommitMessage("вроде так.");
 				addCommitMessage("достал кот");
 				addCommitMessage("попытка 2");
@@ -159,12 +176,33 @@ class PlayState extends CatZimaState
 				bossLevel = true;
 			}
 		}
+
+		if (bossLevel)
+		{
+			//var healthPacksTotal = ChoiceState.journalistBonus;
+			var healthPacksTotal = 5;
+
+			if (healthPacksTotal > 0)
+			{
+				for (i in 0...healthPacksTotal)
+				{
+					var hp: units.HealthPack = cast healthPacks.recycle(units.HealthPack);
+
+					var x = random.float(FlxG.width / 4, FlxG.width * 3 / 4);
+					var y = random.float(FlxG.height / 4, FlxG.height * 3 / 4);
+
+					hp.reset(x - hp.width / 2, y - hp.height / 2);
+				}
+			}
+		}
 	}
 
-	function addCommitMessage(text: String)
+	function addCommitMessage(text: String, goodFix: Bool = false)
 	{
-		var commit = new ChoiceButton("git commit -m \n\"" + text + "\"", 0, 0, 10, 1/2.4, null, "Slot_red", 1/2.7);
+		var commit = new ChoiceButton("git commit -m \n\"" + text + "\"", 0, 0, 10, 1/2.4, null, goodFix ? "Slot_red" : "Slot_blue", 1/2.7);
 
+		if (!goodFix)
+			commit.disableCollision();
 		commit.speed = 50;
 		commit.kill();
 
@@ -211,6 +249,13 @@ class PlayState extends CatZimaState
 		//return true;
 	}
 
+	function healthPackPickup(p, hp)
+	{
+		hp.kill();
+
+		player.hurt(-1);
+	}
+
 	function spawnEnemy(_)
 	{
 		if (!player.alive)
@@ -226,8 +271,18 @@ class PlayState extends CatZimaState
 				var enemy: FlxSprite = cast CatZimaState.enemies.recycle(enemyType);
 
 				var side = random.int(0, 1);
+
+				if (Std.is(enemy, units.Boss))
+				{
+					boss = cast enemy;
+					side = 1;
+				}
+
 				var x = (side == 0) ? -enemy.width : FlxG.width;
 				var y = random.int(0, Math.floor(FlxG.height / 2)) + FlxG.height / 4;
+
+				if (Std.is(enemy, units.Boss))
+					y = FlxG.height / 2;
 
 				enemy.reset(x - enemy.width / 2, y - enemy.height / 2);
 			}
@@ -244,13 +299,37 @@ class PlayState extends CatZimaState
 		}
 	}
 
+	function checkPause()
+	{
+		if (FlxG.keys.anyJustPressed(["ENTER"]) || FlxG.gamepads.anyJustPressed(START))
+		{
+			if (subState == null)
+				openSubState(AchievementState.init());
+			else
+			{
+				//closeSubState();
+				subState = null;
+			}
+		}
+
+	}
+
 	function loseTheLevel()
 	{
 		//CatZimaState.restartGame = true;
 		//FlxG.switchState(new AchievementState());
 
 		//ChoiceState.reset();
-		FlxG.switchState(new StartScreenState());
+
+		if (bossLevel)
+		{
+			ChoiceState.dialogueOrGameplay = 0;
+			FlxG.switchState(new ChoiceState());
+		}
+		else
+		{
+			FlxG.switchState(new StartScreenState());
+		}
 	}
 
 	function winTheLevel()
@@ -262,31 +341,49 @@ class PlayState extends CatZimaState
 
 	override public function update(elapsed: Float): Void
 	{
-		super.update(elapsed);
+		checkPause();
 
-		FlxG.camera.scroll.x += elapsed * 30;
-
-		var hp = Math.ceil(player.health);
-		for (i in 0...playerHealth.widthInTiles)
-			playerHealth.setTile(i, 0, i >= hp ? 0 : 1, true);
-
-		if (bugLevel)
+		if (subState == null)
 		{
-			FlxG.overlap(CatZimaState.playerBullets, blogs, callProgrammer);
-			FlxG.overlap(CatZimaState.enemies, commits, smashBug);
+			super.update(elapsed);
 
-			/*for (c in commits)
+			FlxG.camera.scroll.x += elapsed * 30;
+
+			var hp = Math.ceil(player.health);
+			for (i in 0...playerHealth.widthInTiles)
+				playerHealth.setTile(i, 0, i >= hp ? 0 : 1, true);
+
+			if (bossLevel)
 			{
-				if (c.alive)
+				if (boss != null)
 				{
-					FlxG.overlap(CatZimaState.enemies, c, smashBug);
+					var hp = Math.ceil(boss.health);
+					for (i in 0...bossHealth.widthInTiles)
+						bossHealth.setTile(i, 0, i >= hp ? 0 : 1, true);
 				}
+
+				FlxG.overlap(player, healthPacks, healthPackPickup);
+			}
+
+			if (bugLevel)
+			{
+				FlxG.overlap(CatZimaState.playerBullets, blogs, callProgrammer);
+				FlxG.overlap(CatZimaState.enemies, commits, smashBug);
+
+				/*for (c in commits)
+				{
+					if (c.alive)
+					{
+						FlxG.overlap(CatZimaState.enemies, c, smashBug);
+					}
+				}*/
+			}
+
+			/*if (CatZimaState.enemies.countLiving() <= 0)
+			{
+				//trace("won");
 			}*/
 		}
-
-		/*if (CatZimaState.enemies.countLiving() <= 0)
-		{
-			//trace("won");
-		}*/
+		
 	}
 }

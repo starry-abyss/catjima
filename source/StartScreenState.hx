@@ -18,6 +18,8 @@ class StartScreenState extends FlxState
 	{
 		super.create();
 
+        AchievementState.init();
+
         var background = new FlxSprite();
         background.loadGraphic("assets/images/background.png");
         background.scrollFactor.set();

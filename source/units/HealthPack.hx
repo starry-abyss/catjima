@@ -5,40 +5,34 @@ import flixel.FlxG;
 import flixel.math.FlxRandom;
 import flixel.math.FlxMath;
 
-class Bug extends GenericGuy
+class HealthPack extends GenericGuy
 {
-    public static var graphicString = "bug";
+    public static var graphicString = "health";
 
-    var random = new FlxRandom();
-
-    //var yBase: Float;
+    //var random = new FlxRandom();
 
 	public function new()
 	{
 		super(graphicString);
 
-        speed = 70;
+        speed = 0;
 
-        setSize(30, 30);
-        offset.set(10, 10);
+        setSize(16, 16);
+        offset.set(9, 9);
+
+        animation.stop();
 	}
 
 	override public function update(elapsed: Float): Void
 	{
 		super.update(elapsed);
 
-        if (x > FlxG.width && !isOnScreen())
-        {
-            x = -width;
-            last.x = x;
-        }
 	}
 
     override public function revive()
     {
         super.revive();
 
-        velocity.set(random.float(speed / 2, speed), 0.0);
     }
 
     override public function onTouch()
@@ -48,9 +42,6 @@ class Bug extends GenericGuy
 
     override public function kill()
     {
-        if (alive)
-            CatZimaState.playSoundRandom("ninja_die", 1.0, 3);
-
         super.kill();
     }
 

@@ -269,6 +269,7 @@ class GenericGuy extends FlxSprite
 	override public function kill()
     {
         // if (isOnScreen())
+        if (!Std.is(this, units.HealthPack))
         {
             CatZimaState.spawnEffect(effects.EnemyBoom, centerX, centerY);
         }
@@ -280,11 +281,15 @@ class GenericGuy extends FlxSprite
 
     override public function hurt(amount: Float)
     {
-        if (invincibleTimer <= 0)
-		{
-			invincibleTimer = 1.0;
-        	super.hurt(amount);
-		}
+        if (amount < 0)
+        {
+            super.hurt(amount);
+        }
+        else if (invincibleTimer <= 0)   
+        {
+            invincibleTimer = 1.0;
+            super.hurt(amount);
+        }
         
     }
 
