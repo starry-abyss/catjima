@@ -70,7 +70,7 @@ class StartScreenState extends FlxState
         add(keyHint2);
 
         keyHint2.loadGraphic("assets/images/ui/start button.png");
-        keyHint2.reset(270, 160);
+        keyHint2.reset(270, 161);
         //keyHint2.color = 0xff37b4ff;
 	}
 

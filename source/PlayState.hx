@@ -195,10 +195,39 @@ class PlayState extends CatZimaState
 				}
 			}
 		}
+		else
+		{
+			var keyHintText = new Text("Пауза/значки");
+			keyHintText.reset(175, 4);
+			/*keyHintText.color = 0xff2e5b75;
+			keyHintText.borderSize = 1;
+			keyHintText.borderColor = 0xff37b4ff;
+			keyHintText.borderStyle = OUTLINE;*/
+			keyHintText.color = 0xffffffff;
+			keyHintText.borderSize = 1;
+			keyHintText.borderColor = 0x80000000;
+			keyHintText.borderStyle = OUTLINE;
+			add(keyHintText);
+
+			var keyHint1 = new FlxSprite();
+			keyHint1.scrollFactor.set();
+			add(keyHint1);
+
+			if (units.CatZima.allowKeyboard)
+				keyHint1.loadGraphic("assets/images/ui/enter button.png");
+			else
+				keyHint1.loadGraphic("assets/images/ui/start button.png");
+
+			keyHint1.reset(278, 4);
+			//keyHint1.color = 0xff37b4ff;
+		}
 
 		// for both tweet upgrades
 		if (ChoiceState.hireBonus == 0 && ChoiceState.journalistBonus == 1)
 			CatZimaState.unlockAchievement("message");
+		
+		add(AchievementMessage.init());
+		//AchievementMessage.showMessage("test!");
 	}
 
 	function addCommitMessage(text: String, goodFix: Bool = false)

@@ -21,6 +21,8 @@ class AchievementState extends FlxSubState
 
     var save = new FlxSave();
 
+    var titleById: Map<String, String>;
+
     public static function init(): AchievementState
     {
         if (singleton == null)
@@ -28,6 +30,8 @@ class AchievementState extends FlxSubState
             singleton = new AchievementState();
             //singleton.persistentDraw = true;
             //singleton.persistentUpdate = true;
+
+            singleton.populate();
 
             // from file
             if (singleton.save.bind("save"))
@@ -65,7 +69,11 @@ class AchievementState extends FlxSubState
         if (unlockedAchievements.indexOf(id) == -1 || force)
         {
             if (!force)
+            {
                 unlockedAchievements.push(id);
+
+                AchievementMessage.showMessage(singleton.titleById.get(id));
+            }
 
             //trace(id);
             //trace(singleton.choices);
@@ -87,10 +95,8 @@ class AchievementState extends FlxSubState
         return false;
     }
 
-	override public function create():Void
-	{
-		super.create();
-
+    function populate()
+    {
         choices = new Map<String, ChoiceButton>();
         lockedChoices = new Map<String, ChoiceButton>();
 
@@ -113,6 +119,8 @@ class AchievementState extends FlxSubState
 
         //player.allowShoot = false;
 
+        titleById = new Map<String, String>();
+
         slot = 0;
 
         register("fail", "Жертва красоты", "units/blonde");
@@ -130,6 +138,13 @@ class AchievementState extends FlxSubState
         bgColor = 0;
 
         updateAchievements();
+    }
+
+	override public function create():Void
+	{
+		super.create();
+
+        populate();
 	}
 
     function updateAchievements()
@@ -148,6 +163,9 @@ class AchievementState extends FlxSubState
         var choice = new ChoiceButton(text, slot % 2 == 0 ? 5 : 170, 70 + 30 * Math.floor(slot / 2), 0, 1/4, icon, "Slot_blue", 1/2.2);
         var lockedChoice = new ChoiceButton("??????", slot % 2 == 0 ? 5 : 170, 70 + 30 * Math.floor(slot / 2), 0, 1/4, "units/unknown", "Slot", 1/2.2);
 
+        choice.setAlpha(1.0);
+        lockedChoice.setAlpha(1.0);
+
         choice.visible = false;
 
         add(choice);
@@ -155,6 +173,11 @@ class AchievementState extends FlxSubState
 
         choices.set(id, choice);
         lockedChoices.set(id, lockedChoice);
+
+        if (id == "nospoon")
+            titleById.set("nospoon", "Последние 10%");
+        else
+            titleById.set(id, text);
 
         ++slot;
     }

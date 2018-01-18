@@ -136,6 +136,9 @@ class BriefingState extends CatZimaState
                 keyHint.reset(105, 157);
             }
         }
+
+        add(AchievementMessage.init());
+        //AchievementMessage.showMessage("test!");
 	}
 
 	override public function update(elapsed:Float):Void

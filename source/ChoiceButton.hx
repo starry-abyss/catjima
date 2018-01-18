@@ -85,6 +85,11 @@ class ChoiceButton extends FlxGroup
         }
 	}
 
+    public function setAlpha(value: Float)
+    {
+        background.alpha = value;
+    }
+
     public function moveTo(x: Float, y: Float): Void
     {
         //super.reset(x, y);
@@ -117,6 +122,16 @@ class ChoiceButton extends FlxGroup
     public function overlaps(object: FlxBasic): Bool
     {
         return background.overlaps(object);
+    }
+
+    public function setText(text: String)
+    {
+        description.text = text;
+    }
+
+    public function getText(): String
+    {
+        return description.text;
     }
 
     public function disableCollision()
