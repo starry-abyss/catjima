@@ -155,6 +155,8 @@ class Streamer extends GenericGuy
             killBullet();
 
             allowCollisions = FlxObject.NONE;
+
+            CatZimaState.unlockAchievement("health");
         }
     }
 

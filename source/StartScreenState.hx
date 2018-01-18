@@ -45,9 +45,16 @@ class StartScreenState extends FlxState
 
         CatZimaState.musicMenu();
 
-        var keyHintText = new Text("Для продолжения нажмите:");
-        keyHintText.reset(20, 160);
+        var keyHintText = new Text("Для продолжения нажмите      или");
+        keyHintText.reset(7, 160);
+        /*keyHintText.color = 0xff2e5b75;
+        keyHintText.borderSize = 1;
+        keyHintText.borderColor = 0xff37b4ff;
+        keyHintText.borderStyle = OUTLINE;*/
         keyHintText.color = 0xffffffff;
+        keyHintText.borderSize = 1;
+        keyHintText.borderColor = 0x80000000;
+        keyHintText.borderStyle = OUTLINE;
         add(keyHintText);
 
         var keyHint1 = new FlxSprite();
@@ -55,14 +62,16 @@ class StartScreenState extends FlxState
         add(keyHint1);
 
         keyHint1.loadGraphic("assets/images/ui/enter button.png");
-        keyHint1.reset(225, 160);
+        keyHint1.reset(197, 161);
+        //keyHint1.color = 0xff37b4ff;
 
-       /* var keyHint2 = new FlxSprite();
+        var keyHint2 = new FlxSprite();
         keyHint2.scrollFactor.set();
         add(keyHint2);
 
-        keyHint2.loadGraphic("assets/images/ui/joypad dpad.png");
-        keyHint2.reset(85, 90);*/
+        keyHint2.loadGraphic("assets/images/ui/start button.png");
+        keyHint2.reset(270, 160);
+        //keyHint2.color = 0xff37b4ff;
 	}
 
 	override public function update(elapsed:Float):Void

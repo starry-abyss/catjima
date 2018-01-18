@@ -63,7 +63,7 @@ class BriefingState extends CatZimaState
                 hint = new ChoiceButton("После грубых разборок стримеры сильно обижены. Но зато на Гамине написали обзор вашей игры и сравнили её с Dark Souls.", 0, 0, 10, 4/9, "units/streamer");
             
             case HINT_JOURNALIST:
-                hint = new ChoiceButton("Журналисты благодарят вас, что баги исправлены, и просят друзей в Твиттере увеличить длину сообщений в 2 раза.", 0, 0, 10, 4/9, null);
+                hint = new ChoiceButton("Журналисты рады исправлению багов и просят друзей в Твиттере увеличить урон от сообщений в 2 раза.", 0, 0, 10, 4/9, "units/tweetShot2xIcon");
             
             case HINT_NO_JOURNALIST:
                 hint = new ChoiceButton("Журналисты не могут пройти игру из-за багов. А те, кто-таки смог, пишут негативные рецензии.", 0, 0, 10, 4/9, "units/bug");
@@ -114,7 +114,11 @@ class BriefingState extends CatZimaState
         {
             var keyHintText = new Text("Нажмите         для отправки твита");
             keyHintText.reset(20, 160);
-            keyHintText.color = 0xff000000;
+            //keyHintText.color = 0xff000000;
+            keyHintText.color = 0xffffffff;
+            keyHintText.borderSize = 1;
+            keyHintText.borderColor = 0x80000000;
+            keyHintText.borderStyle = OUTLINE;
             add(keyHintText);
 
             var keyHint = new FlxSprite();
@@ -129,7 +133,7 @@ class BriefingState extends CatZimaState
             else
             {
                 keyHint.loadGraphic("assets/images/ui/Button A.png");
-                keyHint.reset(105, 155);
+                keyHint.reset(105, 157);
             }
         }
 	}

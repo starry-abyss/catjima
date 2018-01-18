@@ -195,6 +195,10 @@ class PlayState extends CatZimaState
 				}
 			}
 		}
+
+		// for both tweet upgrades
+		if (ChoiceState.hireBonus == 0 && ChoiceState.journalistBonus == 1)
+			CatZimaState.unlockAchievement("message");
 	}
 
 	function addCommitMessage(text: String, goodFix: Bool = false)
@@ -303,6 +307,8 @@ class PlayState extends CatZimaState
 	{
 		if (FlxG.keys.anyJustPressed(["ENTER"]) || FlxG.gamepads.anyJustPressed(START))
 		{
+			CatZimaState.playSound("confirm1", 1.0);
+
 			if (subState == null)
 				openSubState(AchievementState.init());
 			else
@@ -328,6 +334,10 @@ class PlayState extends CatZimaState
 		}
 		else
 		{
+			// incremented once, so it's the first level
+			if (ChoiceState.menuId == ChoiceState.MENU_HIRING)
+				CatZimaState.unlockAchievement("fail");
+
 			FlxG.switchState(new StartScreenState());
 		}
 	}
@@ -335,6 +345,12 @@ class PlayState extends CatZimaState
 	function winTheLevel()
 	{
 		//trace("won");
+
+		// for both tweet upgrades
+		if (bugLevel)
+			CatZimaState.unlockAchievement("help");
+		else if (bossLevel)
+			CatZimaState.unlockAchievement("nospoon");
 
 		FlxG.switchState(new ChoiceState());
 	}

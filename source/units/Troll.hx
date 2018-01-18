@@ -129,6 +129,8 @@ class Troll extends GenericGuy
 			if (invincibleTimer <= 0)
 				//CatZimaState.spawnEffect(effects.TrollFace, centerX, centerY, this);
 				CatZimaState.spawnEffect(effects.TrollFace, 0, 0, this);
+
+			CatZimaState.unlockAchievement("hehe");
 		}
 
 		super.hurt(amount);

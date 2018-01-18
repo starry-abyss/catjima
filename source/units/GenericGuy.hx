@@ -13,7 +13,7 @@ import Type;
 class GenericGuy extends FlxSprite
 {
     var speed = 100.0;
-    var shootRate = 0.5;
+    public var shootRate = 0.5;
 
     var overrideSpeedY: Null<Float> = null;
 
@@ -107,12 +107,12 @@ class GenericGuy extends FlxSprite
         if (velocity.x != 0.0 || velocity.y != 0.0)
         {
             if (animation.curAnim.name != "move" + animationSuffix)
-                animation.play("move" + animationSuffix, true, animation.frameIndex == 0);
+                animation.play("move" + animationSuffix, true, animation.frameIndex == 0 && animationSuffix == "");
         }
         else
         {
             if (animation.curAnim.name != "stand" + animationSuffix)
-                animation.play("stand" + animationSuffix, true, animation.frameIndex == 0);
+                animation.play("stand" + animationSuffix, true, animation.frameIndex == 0 && animationSuffix == "");
         }
 
         v.put();
@@ -244,7 +244,13 @@ class GenericGuy extends FlxSprite
             if (needTeleport)
             {
                 abilityTimer = 1.5;
+                
+                var teleport_flipX = flipX;
+                CatZimaState.spawnEffect(effects.Teleport, centerX, centerY, null, teleport_flipX);
+
                 teleport();
+
+                CatZimaState.spawnEffect(effects.TeleportArrive, centerX, centerY, null, !teleport_flipX);
 
                 CatZimaState.playSoundRandom("ninja_shift", 1.0, 3);
             }

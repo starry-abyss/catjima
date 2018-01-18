@@ -18,7 +18,7 @@ class HealthPack extends GenericGuy
         speed = 0;
 
         setSize(16, 16);
-        offset.set(9, 9);
+        offset.set(18, 18);
 
         animation.stop();
 	}

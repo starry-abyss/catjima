@@ -29,6 +29,24 @@ class CatZima extends GenericGuy
 		speed = 150;
 
 		shootRate = ChoiceState.hireBonus == 0 ? 0.35 : 0.5;
+
+		animation.add("standAttack", [2, 1], 4, true);
+        animation.add("moveAttack", [2, 1], 4, true);
+
+		/*animation.add("standAttackFast", [2, 2], 4, true);
+        animation.add("moveAttackFast", [2, 2], 4, true);*/
+
+		//animation.finishCallback = 
+		animation.callback = 
+			function (name, number, index)
+			{
+				if (name == "standAttack" || name == "moveAttack" || name == "standAttackFast" || name == "moveAttackFast")
+					if (number == 1)
+						animationSuffix = "";
+			}
+
+		//shootRate = 0.35;
+		//ChoiceState.journalistBonus = 1;
 	}
 
 	override public function reset(x: Float, y: Float)
@@ -74,6 +92,10 @@ class CatZima extends GenericGuy
 	override public function update(elapsed: Float): Void
 	{
 		super.update(elapsed);
+
+		// reset after attack
+		/*if (animationSuffix != "")
+			animationSuffix = "";*/
 
 		if (waitMoveTimer > 0.0)
 		{
@@ -129,7 +151,10 @@ class CatZima extends GenericGuy
 		if (allowShoot && checkAction())
 		{
 			if (shootPrepare())
+			{
+				animationSuffix = "Attack";
 				CatZimaState.shootTweetBullet();
+			}
 		}
 
 		var borderSize = 24;

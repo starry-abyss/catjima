@@ -142,6 +142,7 @@ class Boss extends GenericGuy
         super.revive();
 
         phase = 0;
+        shootRate = CatZimaState.player.shootRate;
     }
 
     override public function kill()

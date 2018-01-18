@@ -14,6 +14,7 @@ class ChoiceButton extends FlxGroup
     var background: FlxSprite;
     var description: FlxText;
     var icon: FlxSprite = null;
+    //var lockedIcon: FlxSprite = null;
 
     var innerMargin = 10;
 
@@ -43,6 +44,8 @@ class ChoiceButton extends FlxGroup
         //background.setSize(Math.floor(FlxG.width) - margin * 2, Math.floor(FlxG.height * height) - margin * 2);
         background.scrollFactor.set();
         background.updateHitbox();
+
+        background.alpha = 0.75;
         
 
         if (iconPath != null)
@@ -53,6 +56,11 @@ class ChoiceButton extends FlxGroup
             icon.scrollFactor.set();
             icon.updateHitbox();
             
+            /*lockedIcon = new FlxSprite();
+            //icon.loadGraphic(Math.floor(FlxG.width) - margin * 2, Math.floor(FlxG.height * height) - margin * 2, 0xff007700);
+            icon.loadGraphic("assets/images/" + iconPath + ".png", true, 50, 50);
+            icon.scrollFactor.set();
+            icon.updateHitbox();*/
         }
 
         description = new Text(text);
@@ -72,7 +80,9 @@ class ChoiceButton extends FlxGroup
         add(description);
 
         if (iconPath != null)
+        {
             add(icon);
+        }
 	}
 
     public function moveTo(x: Float, y: Float): Void
@@ -97,6 +107,12 @@ class ChoiceButton extends FlxGroup
 
         description.fieldWidth = background.width - (description.x - background.x) - innerMargin;
     }
+
+    // for achievements
+   /* public function setLocked(mode: Bool)
+    {
+        ;
+    }*/
 
     public function overlaps(object: FlxBasic): Bool
     {

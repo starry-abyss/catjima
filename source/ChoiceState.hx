@@ -13,18 +13,18 @@ class ChoiceState extends CatZimaState
     var player: units.CatZima;
     var choices: Array<ChoiceButton>;
 
-    static var menuId = MENU_BOSS;
+    public static var menuId(default, null) = MENU_NARRATIVE;
 
-    static inline var MENU_CONTROLS = 0;
-    static inline var MENU_HIRING = 1;
-    static inline var MENU_NARRATIVE = 2;
-    static inline var MENU_DIALOGUE_1 = 3;
+    public static inline var MENU_CONTROLS = 0;
+    public static inline var MENU_HIRING = 1;
+    public static inline var MENU_NARRATIVE = 2;
+    public static inline var MENU_DIALOGUE_1 = 3;
     //static inline var MENU_DIALOGUE_2 = 4;
-    static inline var MENU_GAMEPLAY_1 = 5;
+    public static inline var MENU_GAMEPLAY_1 = 5;
     //static inline var MENU_GAMEPLAY_2 = 6;
-    static inline var MENU_BUGS = 7;
-    static inline var MENU_PRE_BOSS = 8;
-    static inline var MENU_BOSS = 9;
+    public static inline var MENU_BUGS = 7;
+    public static inline var MENU_PRE_BOSS = 8;
+    public static inline var MENU_BOSS = 9;
 
     static inline var MENU_END = MENU_BOSS + 1;
 
@@ -154,24 +154,30 @@ class ChoiceState extends CatZimaState
 
         if (menuId == MENU_CONTROLS)
         {
-            var keyHintText = new Text("Для выбора\nиспользуйте:");
+            var keyHintText = new Text("Для выбора\nиспользуйте\n\n\n     или");
             keyHintText.reset(20, 60);
-            keyHintText.color = 0xff000000;
+            //keyHintText.color = 0xff000000;
+            keyHintText.color = 0xffffffff;
+            keyHintText.borderSize = 1;
+            keyHintText.borderColor = 0x80000000;
+            keyHintText.borderStyle = OUTLINE;
             add(keyHintText);
 
             var keyHint1 = new FlxSprite();
             keyHint1.scrollFactor.set();
+            //keyHint1.color = 0xff37b4ff;
             add(keyHint1);
 
             keyHint1.loadGraphic("assets/images/ui/WASD Move.png");
-            keyHint1.reset(35, 90);
+            keyHint1.reset(20, 90);
 
             var keyHint2 = new FlxSprite();
             keyHint2.scrollFactor.set();
+            //keyHint2.color = 0xff37b4ff;
             add(keyHint2);
 
             keyHint2.loadGraphic("assets/images/ui/joypad dpad.png");
-            keyHint2.reset(85, 90);
+            keyHint2.reset(90, 90);
         }
 
         //CatZimaState.musicInter();

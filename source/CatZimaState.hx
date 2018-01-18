@@ -148,9 +148,14 @@ class CatZimaState extends FlxState
         musicMode = MUSIC_LEVEL;
     }
 
+    public static function unlockAchievement(id: String)
+    {
+        AchievementState.unlock(id);
+    }
+
     static public function shootTweetBullet()
     {
-        var bullet: units.TweetBullet = cast playerBullets.recycle(units.TweetBullet);
+        var bullet: units.GenericBullet = cast playerBullets.recycle(ChoiceState.journalistBonus == 1 ? units.TweetBullet2x : units.TweetBullet);
 
         var offsetX = player.facing == FlxObject.LEFT ? player.frameWidth - player.bulletSource.x : player.bulletSource.x;
         var offsetY = /*player.facing == FlxObject.LEFT ? player.frameHeight - player.bulletSource.y :*/ player.bulletSource.y;
@@ -174,7 +179,7 @@ class CatZimaState extends FlxState
         bullet.shoot();
     }
 
-    static public function spawnEffect(effectClass: Class<FlxBasic>, x: Float, y: Float, parent: GenericGuy = null)
+    static public function spawnEffect(effectClass: Class<FlxBasic>, x: Float, y: Float, parent: GenericGuy = null, flipX: Bool = false)
     {
         var effect = effects.recycle(effectClass);
 
@@ -189,6 +194,8 @@ class CatZimaState extends FlxState
                 cast(effect, GenericEffect).offsetX = x;
                 cast(effect, GenericEffect).offsetY = y;
             }
+
+            cast(effect, GenericEffect).flipX = flipX;
         }
         else if (Std.is(effect, GenericParticleEffect))
         {
@@ -206,6 +213,8 @@ class CatZimaState extends FlxState
 		FlxG.camera.pixelPerfectRender = true;
 		FlxG.worldDivisions = 1;
         FlxG.fixedTimestep = false;
+
+        destroySubStates = false;
 
         player = new units.CatZima();
 
@@ -250,7 +259,7 @@ class CatZimaState extends FlxState
     {
         if (!Std.is(e, units.Bug))
         {
-            e.hurt(1);
+            e.hurt(Std.is(b, units.TweetBullet2x) ? 2 : 1);
             b.kill();
         }
     }
