@@ -179,8 +179,11 @@ class PlayState extends CatZimaState
 
 		if (bossLevel)
 		{
-			//var healthPacksTotal = ChoiceState.journalistBonus;
-			var healthPacksTotal = 5;
+			var healthPacksTotal = ChoiceState.journalistBonus;
+			if (healthPacksTotal > 5)
+				healthPacksTotal = 5;
+			
+			//var healthPacksTotal = 5;
 
 			if (healthPacksTotal > 0)
 			{

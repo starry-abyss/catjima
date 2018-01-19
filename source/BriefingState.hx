@@ -72,7 +72,19 @@ class BriefingState extends CatZimaState
                 hint = new ChoiceButton("Недоволен, что вы ещё живы: Агент Смит\n\nЭто точно его происки! Он искажает сознание пользователей!", 0, 0, 10, 4/9, "units/boss");
 
             case HINT_IDEA:
-                hint = new ChoiceButton("Кот Зúма:\n\n\"А дай-ка я выложу фото обнимашек с роботом!\"", 0, 0, 10, 4/9, "units/sdf");
+                var i = CatZimaState.random.int(0, 3);
+                var text = 
+                    if (i == 0)
+                        "Кот Зúма:\n\n\"А дай-ка я выложу фото обнимашек с роботом!\"";
+                    else if (i == 1)
+                        "Кот Зúма:\n\n\"И всё-таки я гений!\"";
+                    else if (i == 2)
+                        "Кот Зúма:\n\n\"Пора придумывать сиквел!\"";
+                    else //if (i == 3)
+                        "Кот Зúма:\n\n\"Моль Иньё и вергусь Уткарт отдыхают!\"";
+                    
+                hint = new ChoiceButton(text, 0, 0, 10, 4/9, "units/sdf");
+                
 
             default: {}
         }

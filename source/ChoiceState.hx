@@ -92,8 +92,11 @@ class ChoiceState extends CatZimaState
                 text2 = "Выбор 2: Выбор - через геймплей\n\nСледствие: У знакомых стримеров недовольны зрители";
             
             case MENU_DIALOGUE_1:
-                text1 = "Выбор 1: Строгий сюжет\n\nСледствие: Короткая лаконичная игра";
-                text2 = "Выбор 2: Опциональные квесты\n\nСледствие: Полнота истории и ощущений";
+                /*text1 = "Выбор 1: Строгий сюжет\n\nСледствие: Короткая лаконичная игра";
+                text2 = "Выбор 2: Опциональные квесты\n\nСледствие: Полнота истории и ощущений";*/
+
+                text1 = "Выбор 1: Побольше интриг\n\nСледствие: Плейтест с любителями интриг";
+                text2 = "Выбор 2: Побольше перестрелок\n\nСледствие: Плейтест с любителями перестрелок";
 
             case MENU_BUGS:
                 text1 = "Выбор 1: Релиз по графику, но с багами\n\nСледствие: Баги исправим потом";
@@ -309,13 +312,24 @@ class ChoiceState extends CatZimaState
             case MENU_DIALOGUE_1:
                 dialogueOrGameplay = 0;
 
-                PlayState.enemiesToSpawn = [units.Casual, units.Troll, units.Hardcore, units.Casual, 
-                    units.Casual, units.Troll, units.Hardcore, units.Hardcore, units.Casual, 
-                    units.Casual, units.Troll, units.Hardcore, units.Casual];
+                if (choice == 0)
+                {
+                    PlayState.enemiesToSpawn = [units.Casual, units.Troll, units.Hardcore, units.Casual, 
+                        units.Casual, units.Troll, units.Troll, units.Troll, units.Casual, 
+                        units.Casual, units.Troll, units.Troll, units.Casual];
+                }
+                else
+                {
+                    PlayState.enemiesToSpawn = [units.Casual, units.Hardcore, units.Hardcore, units.Casual, 
+                        units.Casual, units.Troll, units.Hardcore, units.Hardcore, units.Casual, 
+                        units.Casual, units.Troll, units.Hardcore, units.Casual];
+                }
 
                 BriefingState.hintId = BriefingState.HINT_IDEA;
                 
-                bonusLevelOrNot = choice;
+                //bonusLevelOrNot = choice;
+                bonusLevelOrNot = 1;
+
                 menuId = MENU_BUGS;
                 noIncrement = true;
             
