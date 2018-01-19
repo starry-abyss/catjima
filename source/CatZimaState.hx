@@ -48,17 +48,18 @@ class CatZimaState extends FlxState
 
     static var volumeInLevel = 0.9;
     static var volumeInMenu = 0.5;
-    static var musicMode = -1;
+    static var musicMode = MUSIC_STOP;
 
+    static inline var MUSIC_STOP = -1;
     static inline var MUSIC_MENU = 0;
     static inline var MUSIC_INTER = 1;
     static inline var MUSIC_LEVEL = 2;
-
+    
     static var random = new FlxRandom();
 
     public static function playSound(name: String, volume: Float = 1.0)
     {
-        var sound = FlxG.sound.play("assets/sounds/" + name + ".wav", volume);
+        var sound = FlxG.sound.play("assets/sounds/" + name /*+ ".wav"*/, volume);
         sound.persist = true;
     }
 
@@ -117,6 +118,8 @@ class CatZimaState extends FlxState
             return true;
         }
 
+        //musicBeat.
+
         musicBeat.fadeOut(1.0, volume[0]);
         musicTrack1.fadeOut(1.0, volume[1]);
         musicTrack2.fadeOut(1.0, volume[2]);
@@ -146,6 +149,14 @@ class CatZimaState extends FlxState
             initMusic([volumeInLevel, volumeInLevel, 0]);
         
         musicMode = MUSIC_LEVEL;
+    }
+
+    public static function musicStop()
+    {
+        if (musicMode != -1)
+            initMusic([0, 0, 0]);
+        
+        musicMode = -1;
     }
 
     public static function unlockAchievement(id: String)

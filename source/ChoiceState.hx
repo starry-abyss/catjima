@@ -2,6 +2,7 @@ package;
 
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.group.FlxGroup;
 import flixel.FlxState;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
@@ -13,7 +14,7 @@ class ChoiceState extends CatZimaState
     var player: units.CatZima;
     var choices: Array<ChoiceButton>;
 
-    public static var menuId(default, null) = MENU_NARRATIVE;
+    public static var menuId(default, null) = MENU_CONTROLS;
 
     public static inline var MENU_CONTROLS = 0;
     public static inline var MENU_HIRING = 1;
@@ -34,10 +35,18 @@ class ChoiceState extends CatZimaState
     
     public static var bonusLevelOrNot = -1;
     public static var dialogueOrGameplay = -1;
+    public static var lmsOrNot = -1;
+
+    var finalHintGroup: FlxGroup;
 
     var skip = false;
     var blackness: FlxSprite;
     var textAnnounce: Text;
+
+    public static function endGame()
+    {
+        menuId = MENU_END;
+    }
 
     public static function reset()
     {
@@ -50,6 +59,8 @@ class ChoiceState extends CatZimaState
         streamerBonus = -1;
         journalistBonus = -1;
         dialogueOrGameplay = -1;
+        lmsOrNot = -1;
+        bonusLevelOrNot = -1;
     }
 
 	override public function create():Void
@@ -71,7 +82,18 @@ class ChoiceState extends CatZimaState
         var text2 = "";
         var text0 = "";
 
-        text0 = "В следующем месяце...";
+        //text0 = "В следующем месяце...";
+
+        var i = CatZimaState.random.int(0, 3);
+        text0 = 
+            if (i == 0)
+                "В следующем месяце...";
+            else if (i == 1)
+                "В перерыве между твитами...";
+            else if (i == 2)
+                "Во время E3...";
+            else //if (i == 3)
+                "Пока все спали...";
 
         switch (menuId)
         {
@@ -193,6 +215,48 @@ class ChoiceState extends CatZimaState
         textAnnounce = new Text(text0);
         textAnnounce.reset(FlxG.width / 2 - textAnnounce.width / 2, FlxG.height / 2 - textAnnounce.height / 2);
         add(textAnnounce);
+
+        if (menuId == MENU_END)
+        {
+            finalHintGroup = new FlxGroup();
+            //CatZimaState.musicStop();
+
+            CatZimaState.playSound("Win.ogg", 1.0);
+
+            add(AchievementMessage.init());
+
+            var keyHintText = new Text("Нажмите      , чтобы поиграть в игру!");
+			keyHintText.reset(15, 164);
+			/*keyHintText.color = 0xff2e5b75;
+			keyHintText.borderSize = 1;
+			keyHintText.borderColor = 0xff37b4ff;
+			keyHintText.borderStyle = OUTLINE;*/
+			keyHintText.color = 0xffffffff;
+			keyHintText.borderSize = 1;
+			keyHintText.borderColor = 0x80000000;
+			keyHintText.borderStyle = OUTLINE;
+			finalHintGroup.add(keyHintText);
+
+			var keyHint1 = new FlxSprite();
+			keyHint1.scrollFactor.set();
+			finalHintGroup.add(keyHint1);
+
+			if (units.CatZima.allowKeyboard)
+				keyHint1.loadGraphic("assets/images/ui/enter button.png");
+			else
+				keyHint1.loadGraphic("assets/images/ui/start button.png");
+
+			keyHint1.reset(78, 164);
+
+            add(finalHintGroup);
+
+
+            var main = new Text("      Кот Зúма представляет      \n\nпри участии scorched, alexsilent, \n        HaxeFlixel, CodeMan38\n    и др. помощников");
+            main.color = 0xff000000;
+            main.x = 25;
+            main.y = 10;
+            add(main);
+        }
 	}
 
 	override public function update(elapsed:Float):Void
@@ -237,6 +301,22 @@ class ChoiceState extends CatZimaState
         blackness.visible = !endTimer || skip;
         textAnnounce.visible = blackness.visible;
 
+        if (menuId == MENU_END)
+        {
+            CatZimaState.musicStop();
+
+            finalHintGroup.visible = !AchievementMessage.init().visible;
+
+            //CatZimaState.playSound("Win.ogg", 1.0);
+
+            if (FlxG.keys.anyJustPressed(["ENTER"]) || FlxG.gamepads.anyJustPressed(START))
+            {
+                CatZimaState.playSound("confirm1.wav", 1.0);
+                FlxG.switchState(new StartScreenState());
+                return;
+            }
+        }
+        else
         if (!blackness.visible)
             CatZimaState.musicInter();
 
@@ -304,13 +384,15 @@ class ChoiceState extends CatZimaState
 
                 PlayState.enemiesToSpawn = [units.Casual, units.Troll, units.Streamer, units.Casual, 
                     units.Casual, units.Troll, units.Streamer, units.Streamer, units.Casual, 
-                    units.Casual, units.Troll, units.Streamer, units.Casual];
+                    units.Streamer, units.Troll, units.Streamer, units.Casual];
 
                 menuId = MENU_PRE_BOSS;
                 noIncrement = true;
 
             case MENU_DIALOGUE_1:
                 dialogueOrGameplay = 0;
+
+                lmsOrNot = choice;
 
                 if (choice == 0)
                 {
@@ -335,6 +417,8 @@ class ChoiceState extends CatZimaState
             
             case MENU_BUGS:
                 dialogueOrGameplay = 0;
+
+                lmsOrNot = -1;
 
                 if (choice == 0)
                 {
@@ -368,6 +452,8 @@ class ChoiceState extends CatZimaState
                 else if (journalistBonus == 1)
                 {
                     BriefingState.hintId = BriefingState.HINT_JOURNALIST;
+
+                    //journalistBonus = 1;
                 }
                 else
                 {

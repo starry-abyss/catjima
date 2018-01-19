@@ -128,7 +128,8 @@ class AchievementState extends FlxSubState
         register("message", "Твит-машина", "units/tweetMaster");
 
         //register("buggy", "Ничейное небо: выпустить игру с багами", "units/bug");
-        register("help", "Это - фича", "units/bug");
+        //register("help", "Это - фича", "units/bug");
+        register("help", "Battle Royal", "units/hardcore");
         
         register("health", "Личный контакт", "units/health");
         register("nospoon", "Послед-\nние 10%", "units/boss");
@@ -160,8 +161,10 @@ class AchievementState extends FlxSubState
     var slot: Int = 0;
     function register(id: String, text: String, icon: String = null)
     {
-        var choice = new ChoiceButton(text, slot % 2 == 0 ? 5 : 170, 70 + 30 * Math.floor(slot / 2), 0, 1/4, icon, "Slot_blue", 1/2.2);
-        var lockedChoice = new ChoiceButton("??????", slot % 2 == 0 ? 5 : 170, 70 + 30 * Math.floor(slot / 2), 0, 1/4, "units/unknown", "Slot", 1/2.2);
+        var dy = -32;
+
+        var choice = new ChoiceButton(text, slot % 2 == 0 ? 5 : 170, dy + 70 + 30 * Math.floor(slot / 2), 0, 1/4, icon, "Slot_blue", 1/2.2);
+        var lockedChoice = new ChoiceButton("??????", slot % 2 == 0 ? 5 : 170, dy + 70 + 30 * Math.floor(slot / 2), 0, 1/4, "units/unknown", "Slot", 1/2.2);
 
         choice.setAlpha(1.0);
         lockedChoice.setAlpha(1.0);

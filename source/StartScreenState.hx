@@ -3,6 +3,7 @@ package;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
+import flixel.group.FlxGroup;
 import flixel.text.FlxText;
 import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
@@ -13,6 +14,9 @@ class StartScreenState extends FlxState
     var start_screen: FlxSprite;
 
     static var introRead = false;
+    public static var noMusic = false;
+
+    var finalHintGroup: FlxGroup;
 
 	override public function create():Void
 	{
@@ -43,7 +47,12 @@ class StartScreenState extends FlxState
 
         FlxG.mouse.visible = false;
 
-        CatZimaState.musicMenu();
+        if (noMusic)
+            CatZimaState.musicStop();
+        else
+            CatZimaState.musicMenu();
+
+        finalHintGroup = new FlxGroup();
 
         var keyHintText = new Text("Для продолжения нажмите      или");
         keyHintText.reset(7, 160);
@@ -55,11 +64,11 @@ class StartScreenState extends FlxState
         keyHintText.borderSize = 1;
         keyHintText.borderColor = 0x80000000;
         keyHintText.borderStyle = OUTLINE;
-        add(keyHintText);
+        finalHintGroup.add(keyHintText);
 
         var keyHint1 = new FlxSprite();
         keyHint1.scrollFactor.set();
-        add(keyHint1);
+        finalHintGroup.add(keyHint1);
 
         keyHint1.loadGraphic("assets/images/ui/enter button.png");
         keyHint1.reset(197, 161);
@@ -67,20 +76,26 @@ class StartScreenState extends FlxState
 
         var keyHint2 = new FlxSprite();
         keyHint2.scrollFactor.set();
-        add(keyHint2);
+        finalHintGroup.add(keyHint2);
 
         keyHint2.loadGraphic("assets/images/ui/start button.png");
         keyHint2.reset(270, 161);
         //keyHint2.color = 0xff37b4ff;
+
+        add(finalHintGroup);
+
+        add(AchievementMessage.init());
 	}
 
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
 
+        finalHintGroup.visible = !AchievementMessage.init().visible;
+
         if (FlxG.keys.anyJustPressed(["ENTER"]) || FlxG.gamepads.anyJustPressed(START))
 		{
-            CatZimaState.playSound("confirm1", 1.0);
+            CatZimaState.playSound("confirm1.wav", 1.0);
 
             if (!introRead)
             {
@@ -89,6 +104,8 @@ class StartScreenState extends FlxState
             }
             else
             {
+                noMusic = false;
+
                 ChoiceState.reset();
                 FlxG.switchState(new ChoiceState());
             }

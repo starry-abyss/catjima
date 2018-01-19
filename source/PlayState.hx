@@ -126,6 +126,11 @@ class PlayState extends CatZimaState
 		bossHealth.setPosition(2, FlxG.height - 18);
 		add(bossHealth);
 
+
+		// for both tweet upgrades
+		//if (ChoiceState.hireBonus == 0 && ChoiceState.journalistBonus == 1)
+		//	CatZimaState.unlockAchievement("message");
+
 		
 		if (PlayState.enemiesToSpawn.length == 0)
 		{
@@ -137,7 +142,7 @@ class PlayState extends CatZimaState
 			if (PlayState.enemiesToSpawn[0] == units.Bug)
 			{
 				bugLevel = true;
-				ChoiceState.journalistBonus = 1;
+				//ChoiceState.journalistBonus = 1;
 
 				var names = [ "@apg_rt", "@2ebacbac", "@ultraCodz" ];
 
@@ -179,7 +184,7 @@ class PlayState extends CatZimaState
 
 		if (bossLevel)
 		{
-			var healthPacksTotal = ChoiceState.journalistBonus;
+			var healthPacksTotal = ChoiceState.streamerBonus;
 			if (healthPacksTotal > 5)
 				healthPacksTotal = 5;
 			
@@ -224,10 +229,6 @@ class PlayState extends CatZimaState
 			keyHint1.reset(278, 4);
 			//keyHint1.color = 0xff37b4ff;
 		}
-
-		// for both tweet upgrades
-		if (ChoiceState.hireBonus == 0 && ChoiceState.journalistBonus == 1)
-			CatZimaState.unlockAchievement("message");
 		
 		add(AchievementMessage.init());
 		//AchievementMessage.showMessage("test!");
@@ -339,7 +340,7 @@ class PlayState extends CatZimaState
 	{
 		if (FlxG.keys.anyJustPressed(["ENTER"]) || FlxG.gamepads.anyJustPressed(START))
 		{
-			CatZimaState.playSound("confirm1", 1.0);
+			CatZimaState.playSound("confirm1.wav", 1.0);
 
 			if (subState == null)
 				openSubState(AchievementState.init());
@@ -370,6 +371,9 @@ class PlayState extends CatZimaState
 			if (ChoiceState.menuId == ChoiceState.MENU_HIRING)
 				CatZimaState.unlockAchievement("fail");
 
+			CatZimaState.playSound("GameOver.ogg", 1.0);
+			StartScreenState.noMusic = true;
+
 			FlxG.switchState(new StartScreenState());
 		}
 	}
@@ -380,9 +384,26 @@ class PlayState extends CatZimaState
 
 		// for both tweet upgrades
 		if (bugLevel)
-			CatZimaState.unlockAchievement("help");
+		{
+			//CatZimaState.unlockAchievement("help");
+
+			ChoiceState.journalistBonus = 1;
+
+			// for both tweet upgrades
+			if (ChoiceState.hireBonus == 0)
+				CatZimaState.unlockAchievement("message");
+		}
 		else if (bossLevel)
+		{
 			CatZimaState.unlockAchievement("nospoon");
+
+			ChoiceState.endGame();
+		}
+		else if (ChoiceState.lmsOrNot == 1)
+		{
+			// last man standing
+			CatZimaState.unlockAchievement("help");
+		}
 
 		FlxG.switchState(new ChoiceState());
 	}

@@ -13,7 +13,7 @@ class Main extends Sprite
 		FlxG.fixedTimestep = false;
 
 		//addChild(new FlxGame(320, 180, StartScreenState));
-		//addChild(new FlxGame(320, 180, LogoState));
-		addChild(new FlxGame(320, 180, ChoiceState));
+		addChild(new FlxGame(320, 180, LogoState, 1, 60, 60, true, false));
+		//addChild(new FlxGame(320, 180, ChoiceState));
 	}
 }

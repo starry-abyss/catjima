@@ -9,7 +9,7 @@ class Boss extends GenericGuy
 
     var phase = 0;
 
-    var bombRate = 3.0;
+    var bombRate = 1.5;
 
 	public function new()
 	{
@@ -20,7 +20,7 @@ class Boss extends GenericGuy
 
         bulletSource.x += 4;
 
-        health = 12;
+        health = 10;
 
         //var vulnerableAnimation = [0, 2, 3, 1];
 
@@ -35,13 +35,15 @@ class Boss extends GenericGuy
 
         if (phase == 0)
         {
+            //visible = true;
+
             //if (standStill(25))
             if (phase != 0 || chasePlayerY())
             {
-                phase = 1;
+                //phase = 1;
 
                 flee();
-                shootBullets();
+                shootBullets(150);
 
                 /*CatZimaState.enemyBullets.forEachAlive(
                     function (pBullet)
@@ -62,6 +64,8 @@ class Boss extends GenericGuy
         }
         else if (phase == 1)
         {
+            //visible = (invincibleTimer <= 0.0);
+
             if (standStill(70))
             {
                 flee();
@@ -70,11 +74,17 @@ class Boss extends GenericGuy
                 {
                     abilityTimer = bombRate;
                     generateUnit(units.Bomb, CatZimaState.player, true, CatZimaState.playerBullets);
+
+                    //CatZimaState.spawnEffect(effects.TrollFace, 0, 0, this);
                 }
-                else if (abilityTimer <= 2.0)
+                else if (abilityTimer >= 0.5)
                 {
-                    shootBullets();
-                    shootPlayer();
+                    shootBullets(999999);
+                    //shootPlayer();
+                }
+                else
+                {
+
                 }
 
                 
@@ -97,13 +107,13 @@ class Boss extends GenericGuy
             teleport();
     }
 
-    function shootBullets()
+    function shootBullets(range: Float)
     {
         CatZimaState.playerBullets.forEachAlive(
             function (pBullet)
             {
                 var playerBullet: GenericBullet = cast pBullet;
-                if (distance(this, playerBullet) <= 150)
+                if (distance(this, playerBullet) <= range)
                 {
                     //trace(playerBullet.velocity.x);
 
