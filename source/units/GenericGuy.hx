@@ -4,6 +4,7 @@ import flixel.FlxG;
 import flixel.FlxObject;
 import flixel.FlxBasic;
 import flixel.FlxSprite;
+import flixel.group.FlxGroup;
 import flixel.math.FlxMath;
 import flixel.math.FlxVector;
 import flixel.math.FlxPoint;
@@ -214,8 +215,13 @@ class GenericGuy extends FlxSprite
 
     function teleport()
     {
+        var teleport_flipX = flipX;
+        CatZimaState.spawnEffect(effects.Teleport, centerX, centerY, null, teleport_flipX);
+
         setPosition(FlxG.width - centerX - width / 2, y);
         last.set(x, y);
+
+        CatZimaState.spawnEffect(effects.TeleportArrive, centerX, centerY, null, !teleport_flipX);
     }
 
     function teleportIfBullet()
@@ -245,12 +251,12 @@ class GenericGuy extends FlxSprite
             {
                 abilityTimer = 1.5;
                 
-                var teleport_flipX = flipX;
-                CatZimaState.spawnEffect(effects.Teleport, centerX, centerY, null, teleport_flipX);
+                //var teleport_flipX = flipX;
+                //CatZimaState.spawnEffect(effects.Teleport, centerX, centerY, null, teleport_flipX);
 
                 teleport();
 
-                CatZimaState.spawnEffect(effects.TeleportArrive, centerX, centerY, null, !teleport_flipX);
+                //CatZimaState.spawnEffect(effects.TeleportArrive, centerX, centerY, null, !teleport_flipX);
 
                 CatZimaState.playSoundRandom("ninja_shift", 1.0, 3);
             }
@@ -306,5 +312,33 @@ class GenericGuy extends FlxSprite
         abilityTimer = 0.0;
 	    invincibleTimer = 0.0;
     }
+
+    function distance(s1: FlxSprite, s2: FlxSprite): Float
+    {
+        var dx = (s1.x + s1.width / 2) - (s2.x + s2.width / 2);
+        var dy  = (s1.y + s1.height / 2) - (s2.y + s2.height / 2);
+
+        return Math.sqrt(dx*dx + dy*dy);
+    }
+
+    function generateUnit(unitType: Class<GenericGuy>, unitNearby: GenericGuy, reversed: Bool = false, group: FlxGroup = null): GenericGuy
+	{
+        var targetGroup = group == null ? CatZimaState.enemies : group;
+		var newEnemy: GenericGuy = cast targetGroup.recycle(cast unitType);
+		var distance = 1.0;
+
+        var flip = unitNearby.facing == FlxObject.LEFT;
+        if (reversed)
+            flip = !flip;
+        
+		var offset = flip ? unitNearby.width + unitNearby.width * distance : -distance * unitNearby.width - newEnemy.width;
+
+		newEnemy.reset(unitNearby.x + offset, unitNearby.y);
+		newEnemy.facing = unitNearby.facing;
+
+		CatZimaState.spawnEffect(effects.TrollCast, newEnemy.centerX, newEnemy.centerY);
+
+		return cast newEnemy;
+	}
 
 }

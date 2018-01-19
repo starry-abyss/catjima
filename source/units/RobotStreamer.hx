@@ -2,42 +2,22 @@ package units;
 import flixel.FlxObject;
 import flixel.FlxG;
 
-class Streamer extends GenericGuy
+class RobotStreamer extends Streamer
 {
     public static var graphicString = "streamer";
 
-    var bullet: StreamAttack = null;
-    //var effectPrepare: effects.StreamPrepare = null;
-
-    var effectPrepare = false;
-
-    var stopShootDuration = 2;
-    var shootShift = 0.5;
-
-    var speedY = 30;
-    var speedYBullet = 10;
-
-	public function new(overrideGraphicString: String = null)
+	public function new()
 	{
-		super(overrideGraphicString == null ? graphicString : overrideGraphicString);
+		super(graphicString);
 
-        speed = 50;
+        /*speed = 50;
         overrideSpeedY = speedY;
-        shootRate = 2.5;
+        shootRate = 2.5;*/
 
-        //bullet = ;
 	}
 
-    function streamerLogic()
+    override function streamerLogic()
     {
-        if (!alive)
-        {
-            if (isOnScreen())
-                goAway();
-            else
-                exists = false;
-        }
-        else
         if (chasePlayerY())
         //if (standStill(25))
         {
@@ -111,76 +91,26 @@ class Streamer extends GenericGuy
         }
     }
 
-	override public function update(elapsed: Float): Void
-	{
-		super.update(elapsed);
-
-        streamerLogic();
-	}
-
     override public function onTouch()
     {
         //kill();
     }
 
-    function killBullet()
+    override public function softKill()
     {
-        if (bullet != null)
-        {
-            bullet.exists = false;
-            bullet.alive = false;
-
-            bullet = null;
-        }
-
-        /*if (effectPrepare != null)
-        {
-            effectPrepare.exists = false;
-            effectPrepare.alive = false;
-
-            effectPrepare = null;
-        }*/
-    }
-
-    public function softKill()
-    {
-        if (alive)
-        {
-            alive = false;
-
-            if (ChoiceState.streamerBonus == -1)
-                ChoiceState.streamerBonus = 0;
-
-            ChoiceState.streamerBonus++;
-
-            //kill();
-
-            killBullet();
-
-            allowCollisions = FlxObject.NONE;
-
-            CatZimaState.unlockAchievement("health");
-        }
+        // do nothing
     }
 
     override public function revive()
     {
         super.revive();
 
-        allowCollisions = FlxObject.ANY;
-        effectPrepare = false;
     }
 
     override public function kill()
     {
-        killBullet();
-
-        if (alive)
-        {
-            CatZimaState.playSoundRandom("streamer_die", 1.0, 3);
-        }
-
         super.kill();
+
     }
 
 }

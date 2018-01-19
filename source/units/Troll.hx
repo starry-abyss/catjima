@@ -136,7 +136,7 @@ class Troll extends GenericGuy
 		super.hurt(amount);
     }
 
-	function generateUnit(unitType: Class<GenericGuy>, unitNearby: GenericGuy): GenericGuy
+	/*function generateUnit(unitType: Class<GenericGuy>, unitNearby: GenericGuy): GenericGuy
 	{
 		var newEnemy: GenericGuy = cast CatZimaState.enemies.recycle(cast unitType);
 		var distance = 1.0;
@@ -148,7 +148,7 @@ class Troll extends GenericGuy
 		CatZimaState.spawnEffect(effects.TrollCast, newEnemy.centerX, newEnemy.centerY);
 
 		return cast newEnemy;
-	}
+	}*/
 
     override public function onTouch()
     {
