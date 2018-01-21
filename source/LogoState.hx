@@ -67,6 +67,8 @@ class LogoState extends FlxState
 
                     FlxG.camera.shake(0.005 * touchGround, 0.5);
 
+                    CatZimaState.playSound("shake1.wav", 1.0);
+
                     touchGround--;
                     //FlxG.camera.stopFX();
 

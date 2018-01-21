@@ -14,10 +14,10 @@ class ChoiceState extends CatZimaState
     var player: units.CatZima;
     var choices: Array<ChoiceButton>;
 
-    public static var menuId(default, null) = MENU_CONTROLS;
+    public static var menuId(default, null) = MENU_BOSS;
 
     public static inline var MENU_CONTROLS = 0;
-    public static inline var MENU_HIRING = 1;
+    public static inline var MENU_HIRING = 1;  
     public static inline var MENU_NARRATIVE = 2;
     public static inline var MENU_DIALOGUE_1 = 3;
     //static inline var MENU_DIALOGUE_2 = 4;
@@ -36,6 +36,8 @@ class ChoiceState extends CatZimaState
     public static var bonusLevelOrNot = -1;
     public static var dialogueOrGameplay = -1;
     public static var lmsOrNot = -1;
+
+    public static var bossFail = false;
 
     var finalHintGroup: FlxGroup;
 
@@ -61,6 +63,8 @@ class ChoiceState extends CatZimaState
         dialogueOrGameplay = -1;
         lmsOrNot = -1;
         bonusLevelOrNot = -1;
+
+        bossFail = false;
     }
 
 	override public function create():Void
@@ -72,7 +76,16 @@ class ChoiceState extends CatZimaState
         skip = false;
 
         var background = new FlxSprite();
-        background.loadGraphic("assets/images/background.png");
+
+        if (menuId == MENU_END)
+        {
+            background.loadGraphic("assets/images/LOGO win.png");
+        }
+        else
+        {
+            background.loadGraphic("assets/images/background.png");
+        }
+
         background.scrollFactor.set();
         add(background);
 
@@ -82,9 +95,9 @@ class ChoiceState extends CatZimaState
         var text2 = "";
         var text0 = "";
 
-        //text0 = "В следующем месяце...";
+        text0 = "В следующем месяце...";
 
-        var i = CatZimaState.random.int(0, 3);
+        /*var i = CatZimaState.random.int(0, 3);
         text0 = 
             if (i == 0)
                 "В следующем месяце...";
@@ -93,7 +106,7 @@ class ChoiceState extends CatZimaState
             else if (i == 2)
                 "Во время E3...";
             else //if (i == 3)
-                "Пока все спали...";
+                "Пока все спали...";*/
 
         switch (menuId)
         {
@@ -104,14 +117,20 @@ class ChoiceState extends CatZimaState
 
                 text1 = "Выбор 1: Релиз только на ПК\n\nСледствие: Управление клавиатурой";
                 text2 = "Выбор 2: Релиз только на консоль\n\nСледствие: Управление геймпадом";
+
+                text0 = "Во время E3...";
             
             case MENU_HIRING:
                 text1 = "Выбор 1: Нанять сисадмина\n\nСледствие: Ускорение отправки твитов";
                 text2 = "Выбор 2: Нанять модератора\n\nСледствие: Повышение уровня сетевого здоровья";
+
+                text0 = "Пока все спали...";
             
             case MENU_NARRATIVE:
-                text1 = "Выбор 1: Выбор - через диалоги\n\nСледствие: Хардкорные игроки недовольны";
-                text2 = "Выбор 2: Выбор - через геймплей\n\nСледствие: У знакомых стримеров недовольны зрители";
+                text1 = "Выбор 1: Развилки - в тексте\n\nСледствие: Скучно хардкорным игрокам";
+                text2 = "Выбор 2: Развилки - в геймплее\n\nСледствие: Не очевидно стримерам и их зрителям";
+
+                text0 = "На форумах спорят...";
             
             case MENU_DIALOGUE_1:
                 /*text1 = "Выбор 1: Строгий сюжет\n\nСледствие: Короткая лаконичная игра";
@@ -120,18 +139,43 @@ class ChoiceState extends CatZimaState
                 text1 = "Выбор 1: Побольше интриг\n\nСледствие: Плейтест с любителями интриг";
                 text2 = "Выбор 2: Побольше перестрелок\n\nСледствие: Плейтест с любителями перестрелок";
 
+                text0 = "Вопрос от младшего дизайнера...";
+
             case MENU_BUGS:
                 text1 = "Выбор 1: Релиз по графику, но с багами\n\nСледствие: Баги исправим потом";
                 text2 = "Выбор 2: Отодвинуть релиз из-за багов\n\nСледствие: Срочно исправлять их";
+
+                text0 = "В перерыве между твитами...";
             
             case MENU_BOSS:
-                text1 = "Выбор 1: Последняя битва\n\nСледствие: Показать ракам, где они зимуют";
+                text1 = "Выбор 1: Бороться\n\nСледствие: Выпустить игру и спасти Интернет";
                 text2 = "Выбор 2: Сдаться и пойти поспать\n\nСледствие: Сон - лучшее лекарство";
+
+                if (bossFail)
+                {
+                    var i = CatZimaState.random.int(0, 2);
+                    text0 = 
+                        if (i == 0)
+                            "Ну же, вставай...";
+                        else if (i == 1)
+                            "Не верю!";
+                        else //if (i == 3)
+                            "Прощайте, мистер Зúма...";
+                }
+                else
+                {
+                    text0 = "Незадолго до релиза...";
+                }
+
+                bossFail = true;
 
             case MENU_END:
                 player.allowMove = false;
 
             default:
+                if (menuId == MENU_GAMEPLAY_1)
+                    text0 = "Ещё через пару минут...";
+
                 skip = true;
         }
 
@@ -216,6 +260,8 @@ class ChoiceState extends CatZimaState
         textAnnounce.reset(FlxG.width / 2 - textAnnounce.width / 2, FlxG.height / 2 - textAnnounce.height / 2);
         add(textAnnounce);
 
+        add(AchievementMessage.init());
+
         if (menuId == MENU_END)
         {
             finalHintGroup = new FlxGroup();
@@ -223,7 +269,9 @@ class ChoiceState extends CatZimaState
 
             CatZimaState.playSound("Win.ogg", 1.0);
 
-            add(AchievementMessage.init());
+            //AchievementMessage.init().visible = true;
+
+            //add(AchievementMessage.init());
 
             var keyHintText = new Text("Нажмите      , чтобы поиграть в игру!");
 			keyHintText.reset(15, 164);
@@ -251,16 +299,27 @@ class ChoiceState extends CatZimaState
             add(finalHintGroup);
 
 
-            var main = new Text("      Кот Зúма представляет      \n\nпри участии scorched, alexsilent, \n        HaxeFlixel, CodeMan38\n    и др. помощников");
-            main.color = 0xff000000;
+            //var main = new Text("      КОТУ ЗúМА ПУРОДАКУСЁН      \n\nс использованием \n  scorched, alexsilent, HaxeFlixel, \n  CodeMan38 и др. помощников");
+            var main = new Text("scorched                HaxeFlixel\n\n alexsilent            CodeMan38");
+            main.color = 0xff3F4C49;
+            main.borderSize = 1;
+            main.borderColor = 0x80000000;
+            main.borderStyle = OUTLINE;
+
             main.x = 25;
-            main.y = 10;
+            main.y = 130;
             add(main);
         }
+
+
+        add(exitState = new ExitState());
 	}
 
 	override public function update(elapsed:Float):Void
 	{
+        if (exitState.isOpen())
+            return;
+
 		super.update(elapsed);
 
         var choice = -1;
@@ -317,8 +376,12 @@ class ChoiceState extends CatZimaState
             }
         }
         else
-        if (!blackness.visible)
-            CatZimaState.musicInter();
+        {
+            if (!blackness.visible)
+                CatZimaState.musicInter();
+
+            //AchievementMessage.init().visible = blackness.visible;
+        }
 
         if (skip && endTimer)
             choice = 0;

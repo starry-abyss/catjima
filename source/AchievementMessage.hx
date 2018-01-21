@@ -63,10 +63,15 @@ class AchievementMessage extends ChoiceButton
 	{
 		super.update(elapsed);
 
-        timeLeft -= elapsed;
-        if (timeLeft <= 0.0)
+       //init();
+
+        //if (singleton.visible)
         {
-            hideMessage();
+            timeLeft -= elapsed;
+            if (timeLeft <= 0.0)
+            {
+                hideMessage();
+            }
         }
 	}
 

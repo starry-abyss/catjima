@@ -85,10 +85,21 @@ class StartScreenState extends FlxState
         add(finalHintGroup);
 
         add(AchievementMessage.init());
+
+
+        //destroySubStates = false;
+        //persistentUpdate = true;
+        //openSubState(exitState = new ExitState());
+        add(exitState = new ExitState());
 	}
+
+    var exitState: ExitState;
 
 	override public function update(elapsed:Float):Void
 	{
+        if (exitState.isOpen())
+            return;
+
 		super.update(elapsed);
 
         finalHintGroup.visible = !AchievementMessage.init().visible;

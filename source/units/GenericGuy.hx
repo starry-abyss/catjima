@@ -311,6 +311,8 @@ class GenericGuy extends FlxSprite
 
         abilityTimer = 0.0;
 	    invincibleTimer = 0.0;
+
+        //shootTimer.cancel();
     }
 
     function distance(s1: FlxSprite, s2: FlxSprite): Float

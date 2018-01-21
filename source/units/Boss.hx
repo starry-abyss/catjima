@@ -131,6 +131,8 @@ class Boss extends GenericGuy
 
                         //CatZimaState.playSoundRandom("ninja_shoot", 1.0, 3);
 
+                        CatZimaState.playSoundRandom("boss_shoot", 0.8, 3);
+
                     }
                 }
             }
@@ -145,7 +147,7 @@ class Boss extends GenericGuy
 
             bullet.shootPlayer();
 
-            //CatZimaState.playSoundRandom("ninja_shoot", 1.0, 3);
+            CatZimaState.playSoundRandom("boss_shoot", 0.8, 3);
 
         }
     }
@@ -168,6 +170,8 @@ class Boss extends GenericGuy
     override public function hurt(amount: Float)
     {
         //phase++;
+
+        CatZimaState.playSoundRandom("boss_hit", 1.0, 3);
 
         if (phase == 2)
             phase = 0;

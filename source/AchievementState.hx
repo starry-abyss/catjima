@@ -73,6 +73,8 @@ class AchievementState extends FlxSubState
                 unlockedAchievements.push(id);
 
                 AchievementMessage.showMessage(singleton.titleById.get(id));
+
+                CatZimaState.playSound("achievement1.wav", 1.0);
             }
 
             //trace(id);

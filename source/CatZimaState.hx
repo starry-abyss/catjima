@@ -120,9 +120,9 @@ class CatZimaState extends FlxState
 
         //musicBeat.
 
-        musicBeat.fadeOut(1.0, volume[0]);
-        musicTrack1.fadeOut(1.0, volume[1]);
-        musicTrack2.fadeOut(1.0, volume[2]);
+        musicBeat.fadeOut(0.9, volume[0]);
+        musicTrack1.fadeOut(0.9, volume[1]);
+        musicTrack2.fadeOut(0.9, volume[2]);
 
         return false;
     }
@@ -154,7 +154,13 @@ class CatZimaState extends FlxState
     public static function musicStop()
     {
         if (musicMode != -1)
-            initMusic([0, 0, 0]);
+        {
+            //initMusic([0, 0, 0]);
+            musicBeat.volume = 0;
+            musicTrack1.volume = 0;
+            musicTrack2.volume = 0;
+        }
+            
         
         musicMode = -1;
     }
@@ -245,7 +251,14 @@ class CatZimaState extends FlxState
         player.allowMove = true;
 
         add(timerManager);
+
+
+        //persistentUpdate = true;
+        //openSubState(exitState = new ExitState());
+        //add(exitState = new ExitState());
 	}
+
+    var exitState: ExitState;
 
     function playerHitByBullet(p, b)
     {
@@ -300,6 +313,9 @@ class CatZimaState extends FlxState
 
 	override public function update(elapsed:Float):Void
 	{
+        /*if (exitState.isOpen())
+            return;*/
+            
 		super.update(elapsed);
 
         if (!restartGame)

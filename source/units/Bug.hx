@@ -49,7 +49,7 @@ class Bug extends GenericGuy
     override public function kill()
     {
         if (alive)
-            CatZimaState.playSoundRandom("ninja_die", 1.0, 3);
+             CatZimaState.playSoundRandom("bug", 0.8, 3);
 
         super.kill();
     }

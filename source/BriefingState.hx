@@ -12,7 +12,7 @@ class BriefingState extends CatZimaState
     var player: units.CatZima;
     var choices: Array<ChoiceButton>;
 
-    var startButton: ChoiceButton;
+    var startButton: FlxSprite;
 
     public static var hintId = HINT_HARDCORE;
 
@@ -54,7 +54,7 @@ class BriefingState extends CatZimaState
                 hint = new ChoiceButton("Недоволен выбором: Баг после апдейта\n\nВнедрён агентом Смитом. Позовите программистов!", 0, 0, 10, 4/9, "units/bug");
 
             case HINT_STREAMER:
-                hint = new ChoiceButton("Недоволен выбором: Стример\n\nСчитает, что его зрителям не понравится это изменение.", 0, 0, 10, 4/9, "units/streamer");
+                hint = new ChoiceButton("Недоволен выбором: Стример\n\nЗрители привыкли к развилкам в тексте.", 0, 0, 10, 4/9, "units/streamer");
 
             case HINT_STREAMER_SAVE:
                 hint = new ChoiceButton("Спасенный стример понял, что был не прав, отблагодарил, что вы с ним мягко обошлись, и разблокировал вам смайлик с сердечком.", 0, 0, 10, 4/9, "units/health");
@@ -69,7 +69,7 @@ class BriefingState extends CatZimaState
                 hint = new ChoiceButton("Журналисты не могут пройти игру из-за багов. А те, кто-таки смог, пишут негативные рецензии.", 0, 0, 10, 4/9, "units/bug");
 
             case HINT_BOSS:
-                hint = new ChoiceButton("Недоволен, что вы ещё живы: Агент Смит\n\nЭто точно его происки! Он искажает сознание пользователей!", 0, 0, 10, 4/9, "units/boss");
+                hint = new ChoiceButton("Недоволен, что вы ещё живы: Агент Смит\n\nТак вот, кто формирует мнение игроков!", 0, 0, 10, 4/9, "units/boss");
 
             case HINT_IDEA:
                 var i = CatZimaState.random.int(0, 3);
@@ -95,13 +95,21 @@ class BriefingState extends CatZimaState
 
         player = CatZimaState.player;
 
-        startButton = new ChoiceButton("Блог", Math.floor(FlxG.width * 3 / 4 - 50), Math.floor(FlxG.height * 3 / 4 - 50), 10, 1/3);
+        
+
+        startButton = new FlxSprite(Math.floor(FlxG.width * 3 / 4 - 30), Math.floor(FlxG.height * 3 / 4 - 30));
+        startButton.loadGraphic("assets/images/ui/blog.png", false);
+        startButton.updateHitbox();
+        startButton.scrollFactor.set();
 
 
-        var blog = new FlxSprite(startButton.x + 60, startButton.y + 15);
-        blog.loadGraphic("assets/images/ui/blog.png", false);
-        blog.updateHitbox();
-        blog.scrollFactor.set();
+        //startButton = new ChoiceButton("Блог", Math.floor(FlxG.width * 3 / 4 - 50), Math.floor(FlxG.height * 3 / 4 - 50), 10, 1/3);
+        var blog = new Text("микроблог");
+        blog.reset(startButton.x + startButton.width + 5, startButton.y + 5);
+        blog.color = 0xffffffff;
+        blog.borderSize = 1;
+        blog.borderColor = 0x80000000;
+        blog.borderStyle = OUTLINE;
 
 
         player.reset(Math.floor(FlxG.width * 1 / 4 - player.width / 2), Math.floor(FlxG.height * 3 / 4 - player.height / 2 - 20));
@@ -151,10 +159,15 @@ class BriefingState extends CatZimaState
 
         add(AchievementMessage.init());
         //AchievementMessage.showMessage("test!");
+
+        add(exitState = new ExitState());
 	}
 
 	override public function update(elapsed:Float):Void
 	{
+        if (exitState.isOpen())
+            return;
+            
 		super.update(elapsed);
 
         if (startButton.overlaps(CatZimaState.playerBullets))

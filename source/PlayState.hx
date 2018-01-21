@@ -83,6 +83,8 @@ class PlayState extends CatZimaState
 		foregroundByIndex(0).scrollFactor.set(2.5, 0);
 		foregroundByIndex(1).scrollFactor.set(0.5, 0);
 
+		//backgroundByIndex(0).color = 0xff0000ff;
+
 		//FlxG.stage.color = foregroundByIndex(1).pixels.getPixel(0, 0);
 		
 
@@ -197,7 +199,8 @@ class PlayState extends CatZimaState
 					var hp: units.HealthPack = cast healthPacks.recycle(units.HealthPack);
 
 					var x = random.float(FlxG.width / 4, FlxG.width * 3 / 4);
-					var y = random.float(FlxG.height / 4, FlxG.height * 3 / 4);
+					//var y = random.float(FlxG.height / 4, FlxG.height * 3 / 4);
+					var y = random.float(player.y + player.height + 10, FlxG.height * 3 / 4);
 
 					hp.reset(x - hp.width / 2, y - hp.height / 2);
 				}
@@ -232,6 +235,8 @@ class PlayState extends CatZimaState
 		
 		add(AchievementMessage.init());
 		//AchievementMessage.showMessage("test!");
+
+		add(exitState = new ExitState());
 	}
 
 	function addCommitMessage(text: String, goodFix: Bool = false)
@@ -249,6 +254,8 @@ class PlayState extends CatZimaState
 	function callProgrammer(bullet, programmerBlog)
 	{
 		bullet.kill();
+
+		CatZimaState.playSoundRandom("commit", 1.0, 3);
 
 		programmerBlog.kill();
 		var timer = new FlxTimer(CatZimaState.timerManager);
@@ -278,6 +285,8 @@ class PlayState extends CatZimaState
 			oops.velocity.y = 50;
 
 			FlxG.camera.shake(0.005, 0.5);
+
+			CatZimaState.playSound("shake1.wav", 1.0);
 		}
 
 		bug.kill();
@@ -291,6 +300,8 @@ class PlayState extends CatZimaState
 		hp.kill();
 
 		player.hurt(-1);
+
+		CatZimaState.playSoundRandom("heart", 0.8, 3);
 	}
 
 	function spawnEnemy(_)
@@ -412,6 +423,9 @@ class PlayState extends CatZimaState
 	{
 		checkPause();
 
+		if (exitState.isOpen())
+            return;
+		
 		if (subState == null)
 		{
 			super.update(elapsed);
