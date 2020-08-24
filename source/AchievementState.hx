@@ -102,8 +102,8 @@ class AchievementState extends FlxSubState
         choices = new Map<String, ChoiceButton>();
         lockedChoices = new Map<String, ChoiceButton>();
 
-        //choices[""] = new ChoiceButton("Управление клавиатурой", 0, 0, 10, 1/3, "units/");
-        //choices[""] = new ChoiceButton("Управление геймпадом", 0, 120, 10, 1/3, "");
+        //choices[""] = new ChoiceButton("Keyboard controls", 0, 0, 10, 1/3, "units/");
+        //choices[""] = new ChoiceButton("Gamepad controls", 0, 120, 10, 1/3, "");
 
         //choices = [ choice1, choice2 ];
 
@@ -125,16 +125,16 @@ class AchievementState extends FlxSubState
 
         slot = 0;
 
-        register("fail", "Жертва красоты", "units/blonde");
-        register("hehe", "Тонкая грань", "units/trololoshka");
-        register("message", "Твит-машина", "units/tweetMaster");
+        register("fail", "Victim of beauty", "units/blonde");
+        register("hehe", "A thin ice", "units/trololoshka");
+        register("message", "Tweet machine", "units/tweetMaster");
 
-        //register("buggy", "Ничейное небо: выпустить игру с багами", "units/bug");
-        //register("help", "Это - фича", "units/bug");
+        //register("buggy", "No Man's Sky: Release Bug Game", "units/bug");
+        //register("help", "This is a feature", "units/bug");
         register("help", "Battle Royal", "units/hardcore");
         
-        register("health", "Личный контакт", "units/health");
-        register("nospoon", "Послед-\nние 10%", "units/boss");
+        register("health", "Personal contact", "units/health");
+        register("nospoon", "Last 10%", "units/boss");
         
         //persist = true;
 
@@ -180,7 +180,7 @@ class AchievementState extends FlxSubState
         lockedChoices.set(id, lockedChoice);
 
         if (id == "nospoon")
-            titleById.set("nospoon", "Последние 10%");
+            titleById.set("nospoon", "Last 10%");
         else
             titleById.set(id, text);
 

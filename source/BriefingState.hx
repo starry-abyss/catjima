@@ -42,46 +42,46 @@ class BriefingState extends CatZimaState
         switch (hintId)
         {
             case HINT_BLONDE:
-                hint = new ChoiceButton("Недоволен выбором: Казуальный игрок\n\nНе будет игры на мобилку - затапает!", 0, 0, 10, 4/9, "units/blonde");
+                hint = new ChoiceButton("Unhappy to this choice: Casual player\n\nThey tap you to death if no games on the mobile phone!", 0, 0, 10, 4/9, "units/blonde");
 
             case HINT_HARDCORE:
-                hint = new ChoiceButton("Недоволен выбором: Хардкорный игрок\n\nСросся с контроллером. Реакция - как у ниндзи!", 0, 0, 10, 4/9, "units/hardcore");
+                hint = new ChoiceButton("Unhappy to this choice: Hardcore player\n\nMerged with the gamepad. Reaction - like a ninja!, 0, 0, 10, 4/9, "units/hardcore");
 
             case HINT_TROLL:
-                hint = new ChoiceButton("Недоволен по жизни: Анонимный тролль\n\nИзбегать ЛЮБОГО контакта! Влияет на окружающих.", 0, 0, 10, 4/9, "units/trololoshka");
+                hint = new ChoiceButton("Unhappy basically: Anonymous troll\n\nAvoid ANY contact! Affects others.", 0, 0, 10, 4/9, "units/trololoshka");
 
             case HINT_BUG:
-                hint = new ChoiceButton("Недоволен выбором: Баг после апдейта\n\nВнедрён агентом Смитом. Позовите программистов!", 0, 0, 10, 4/9, "units/bug");
+                hint = new ChoiceButton("Unhappy to this choice: Bug after update\n\nIntroduced by Agent Smith. Call the programmers!", 0, 0, 10, 4/9, "units/bug");
 
             case HINT_STREAMER:
-                hint = new ChoiceButton("Недоволен выбором: Стример\n\nЗрители привыкли к развилкам в тексте.", 0, 0, 10, 4/9, "units/streamer");
+                hint = new ChoiceButton("Unhappy to this choice: Streamer\n\nThe audience is used to the branching in the text.", 0, 0, 10, 4/9, "units/streamer");
 
             case HINT_STREAMER_SAVE:
-                hint = new ChoiceButton("Спасенный стример понял, что был не прав, отблагодарил, что вы с ним мягко обошлись, и разблокировал вам смайлик с сердечком.", 0, 0, 10, 4/9, "units/health");
+                hint = new ChoiceButton("The rescued streamer realized that he was wrong, thanked you for being gentle with him, and unlocked an emoticon with a heart for you.", 0, 0, 10, 4/9, "units/health");
             
             case HINT_STREAMER_KILL:
-                hint = new ChoiceButton("После грубых разборок стримеры сильно обижены. Но зато на Гамине написали обзор вашей игры и сравнили её с Dark Souls.", 0, 0, 10, 4/9, "units/streamer");
+                hint = new ChoiceButton("After a rough showdown, the streamers are greatly offended. But on the other hand, Gamin wrote a review of your game and compared it to Dark Souls.", 0, 0, 10, 4/9, "units/streamer");
             
             case HINT_JOURNALIST:
-                hint = new ChoiceButton("Журналисты рады исправлению багов и просят друзей в Твиттере увеличить урон от сообщений в 2 раза.", 0, 0, 10, 4/9, "units/tweetShot2xIcon");
+                hint = new ChoiceButton("The journalists are happy to fix bugs and ask their friends on Twitter to double the damage from messages.", 0, 0, 10, 4/9, "units/tweetShot2xIcon");
             
             case HINT_NO_JOURNALIST:
-                hint = new ChoiceButton("Журналисты не могут пройти игру из-за багов. А те, кто-таки смог, пишут негативные рецензии.", 0, 0, 10, 4/9, "units/bug");
+                hint = new ChoiceButton("Journalists cannot complete the game due to bugs. And those who did manage to, write negative reviews.", 0, 0, 10, 4/9, "units/bug");
 
             case HINT_BOSS:
-                hint = new ChoiceButton("Недоволен, что вы ещё живы: Агент Смит\n\nТак вот, кто формирует мнение игроков!", 0, 0, 10, 4/9, "units/boss");
+                hint = new ChoiceButton("Unhappy You Are Still Alive: Agent Smith\n\nSo, who forms the opinion of the players!", 0, 0, 10, 4/9, "units/boss");
 
             case HINT_IDEA:
                 var i = CatZimaState.random.int(0, 3);
                 var text = 
                     if (i == 0)
-                        "Кот Зúма:\n\n\"А дай-ка я выложу фото обнимашек с роботом!\"";
+                        "Кот Зúма:\n\n\"Let me post a photo of hugs with a robot!\"";
                     else if (i == 1)
-                        "Кот Зúма:\n\n\"И всё-таки я гений!\"";
+                        "Кот Зúма:\n\n\"And yet I'm a genius!\"";
                     else if (i == 2)
-                        "Кот Зúма:\n\n\"Пора придумывать сиквел!\"";
+                        "Кот Зúма:\n\n\"It's time to come up with a sequel!\"";
                     else //if (i == 3)
-                        "Кот Зúма:\n\n\"Моль Иньё и вергусь Уткарт отдыхают!\"";
+                        "Кот Зúма:\n\n\"Mole Yneux and weregoose Purrhard are resting!\"";
                     
                 hint = new ChoiceButton(text, 0, 0, 10, 4/9, "units/sdf");
                 
@@ -104,7 +104,7 @@ class BriefingState extends CatZimaState
 
 
         //startButton = new ChoiceButton("Блог", Math.floor(FlxG.width * 3 / 4 - 50), Math.floor(FlxG.height * 3 / 4 - 50), 10, 1/3);
-        var blog = new Text("микроблог");
+        var blog = new Text("microblog");
         blog.reset(startButton.x + startButton.width + 5, startButton.y + 5);
         blog.color = 0xffffffff;
         blog.borderSize = 1;
@@ -132,7 +132,7 @@ class BriefingState extends CatZimaState
         
         if (hintId == HINT_BLONDE)
         {
-            var keyHintText = new Text("Нажмите         для отправки твита");
+            var keyHintText = new Text("Press            to send a tweet");
             keyHintText.reset(20, 160);
             //keyHintText.color = 0xff000000;
             keyHintText.color = 0xffffffff;

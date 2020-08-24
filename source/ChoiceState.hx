@@ -100,13 +100,13 @@ class ChoiceState extends CatZimaState
         /*var i = CatZimaState.random.int(0, 3);
         text0 = 
             if (i == 0)
-                "В следующем месяце...";
+                "Next month...";
             else if (i == 1)
-                "В перерыве между твитами...";
+                "Between tweets...";
             else if (i == 2)
-                "Во время E3...";
+                "During E3...";
             else //if (i == 3)
-                "Пока все спали...";*/
+                "While everyone was asleep...";*/
 
         switch (menuId)
         {
@@ -115,56 +115,56 @@ class ChoiceState extends CatZimaState
 
                 player.allowMove = true;
 
-                text1 = "Выбор 1: Релиз только на ПК\n\nСледствие: Управление клавиатурой";
-                text2 = "Выбор 2: Релиз только на консоль\n\nСледствие: Управление геймпадом";
+                text1 = "Choice 1: PC Only Release\n\nResult: Keyboard Control";
+                text2 = "Choice 2: Console-only release\n\nResult: Gamepad Control";
 
-                text0 = "Во время E3...";
+                text0 = "During E3...";
             
             case MENU_HIRING:
-                text1 = "Выбор 1: Нанять сисадмина\n\nСледствие: Ускорение отправки твитов";
-                text2 = "Выбор 2: Нанять модератора\n\nСледствие: Повышение уровня сетевого здоровья";
+                text1 = "Choice 1: Hire a sysadmin\n\nResult: Speeding up sending tweets";
+                text2 = "Choice 2: Hire a moderator\n\nResult: Improving network health";
 
-                text0 = "Пока все спали...";
+                text0 = "While everyone was asleep...";
             
             case MENU_NARRATIVE:
-                text1 = "Выбор 1: Развилки - в тексте\n\nСледствие: Скучно хардкорным игрокам";
-                text2 = "Выбор 2: Развилки - в геймплее\n\nСледствие: Не очевидно стримерам и их зрителям";
+                text1 = "Choice 1: Choices - in text\n\nResult: Boring for hardcore players";
+                text2 = "Choice 2: Choices - in the gameplay\n\nResult: Not obvious to streamers and their viewers";
 
-                text0 = "На форумах спорят...";
+                text0 = "They argue on the forums...";
             
             case MENU_DIALOGUE_1:
-                /*text1 = "Выбор 1: Строгий сюжет\n\nСледствие: Короткая лаконичная игра";
-                text2 = "Выбор 2: Опциональные квесты\n\nСледствие: Полнота истории и ощущений";*/
+                /*text1 = "Выбор 1: Строгий сюжет\n\nResult: Короткая лаконичная игра";
+                text2 = "Выбор 2: Опциональные квесты\n\nResult: Полнота истории и ощущений";*/
 
-                text1 = "Выбор 1: Побольше интриг\n\nСледствие: Плейтест с любителями интриг";
-                text2 = "Выбор 2: Побольше перестрелок\n\nСледствие: Плейтест с любителями перестрелок";
+                text1 = "Choice 1: More intrigue\n\nResult: Playtesting with intrigue fans";
+                text2 = "Choice 2: More shootings\n\nResult: Playtesting with gunfight fans";
 
-                text0 = "Вопрос от младшего дизайнера...";
+                text0 = "A question from a junior designer...";
 
             case MENU_BUGS:
-                text1 = "Выбор 1: Релиз по графику, но с багами\n\nСледствие: Баги исправим потом";
-                text2 = "Выбор 2: Отодвинуть релиз из-за багов\n\nСледствие: Срочно исправлять их";
+                text1 = "Choice 1: Release on schedule, but with bugs\n\nResult: We'll fix bugs later";
+                text2 = "Choice 2: Postpone release due to bugs\n\nResult: Fix them urgently";
 
-                text0 = "В перерыве между твитами...";
+                text0 = "Between tweets...";
             
             case MENU_BOSS:
-                text1 = "Выбор 1: Бороться\n\nСледствие: Выпустить игру и спасти Интернет";
-                text2 = "Выбор 2: Сдаться и пойти поспать\n\nСледствие: Сон - лучшее лекарство";
+                text1 = "Choice 1: Struggle\n\nResult: Release the game and save the Internet";
+                text2 = "Choice 2: Give up and go to sleep\n\nResult: Sleep is the best medicine";
 
                 if (bossFail)
                 {
                     var i = CatZimaState.random.int(0, 2);
                     text0 = 
                         if (i == 0)
-                            "Ну же, вставай...";
+                            "Now get up.";
                         else if (i == 1)
-                            "Не верю!";
+                            "Can't be!";
                         else //if (i == 3)
-                            "Прощайте, мистер Зúма...";
+                            "Goodbye Mr. Jíma...";
                 }
                 else
                 {
-                    text0 = "Незадолго до релиза...";
+                    text0 = "Shortly before release...";
                 }
 
                 bossFail = true;
@@ -174,7 +174,7 @@ class ChoiceState extends CatZimaState
 
             default:
                 if (menuId == MENU_GAMEPLAY_1)
-                    text0 = "Ещё через пару минут...";
+                    text0 = "In another couple of minutes...";
 
                 skip = true;
         }
@@ -223,7 +223,7 @@ class ChoiceState extends CatZimaState
 
         if (menuId == MENU_CONTROLS)
         {
-            var keyHintText = new Text("Для выбора\nиспользуйте\n\n\n     или");
+            var keyHintText = new Text("For choice\nuse       \n\n\n     or");
             keyHintText.reset(20, 60);
             //keyHintText.color = 0xff000000;
             keyHintText.color = 0xffffffff;
@@ -273,7 +273,7 @@ class ChoiceState extends CatZimaState
 
             //add(AchievementMessage.init());
 
-            var keyHintText = new Text("Нажмите      , чтобы поиграть в игру!");
+            var keyHintText = new Text("Press        , to play game!");
 			keyHintText.reset(15, 164);
 			/*keyHintText.color = 0xff2e5b75;
 			keyHintText.borderSize = 1;
@@ -299,7 +299,7 @@ class ChoiceState extends CatZimaState
             add(finalHintGroup);
 
 
-            //var main = new Text("      КОТУ ЗúМА ПУРОДАКУСЁН      \n\nс использованием \n  scorched, alexsilent, HaxeFlixel, \n  CodeMan38 и др. помощников");
+            //var main = new Text("      CAT JíMA PURODAKUSEN      \n\nwith using    \n  scorched, alexsilent, HaxeFlixel, \n  CodeMan38 and other assistants");
             var main = new Text("scorched                HaxeFlixel\n\n alexsilent            CodeMan38");
             main.color = 0xff3F4C49;
             main.borderSize = 1;

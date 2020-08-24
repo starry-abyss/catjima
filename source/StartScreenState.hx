@@ -29,10 +29,10 @@ class StartScreenState extends FlxState
         background.scrollFactor.set();
         add(background);
 
-        var hint = new ChoiceButton("  Кот Зúма - талантливый разработчик игр, но не всем нравятся его дизайнерские решения. " +
-            "В сети Интернет участились нападения на кота. \n  Однако у него есть секретное оружие - аккаунт в Твиттере. " +
-            "С его помощью он может отстоять своё креативное видение и довести игру до релиза. \n\n" +
-            "  Помогите Зúме!", 0, 0, 10, 2.5/3, "units/sdf");
+        var hint = new ChoiceButton("  Cat Jíma - is talented game developer, but not everyone likes his designs. " +
+            "Attacks on a cat have increased on the Internet. \n   But, he has a secret weapon - a Twitter account. " +
+            "With its help, he can defend his creative vision and bring the game to release. \n\n" +
+            "  Help Jíma!", 0, 0, 10, 2.5/3, "units/sdf");
         add(hint);
 
         start_screen = new FlxSprite();
@@ -54,7 +54,7 @@ class StartScreenState extends FlxState
 
         finalHintGroup = new FlxGroup();
 
-        var keyHintText = new Text("Для продолжения нажмите      или");
+		var keyHintText = new Text("To continue please press      or");
         keyHintText.reset(7, 160);
         /*keyHintText.color = 0xff2e5b75;
         keyHintText.borderSize = 1;
