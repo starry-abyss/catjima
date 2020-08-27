@@ -29,8 +29,8 @@ class StartScreenState extends FlxState
         background.scrollFactor.set();
         add(background);
 
-        var hint = new ChoiceButton("  Cat Jíma - is talented game developer, but not everyone likes his designs. " +
-            "Attacks on a cat have increased on the Internet. \n   But, he has a secret weapon - a Twitter account. " +
+        var hint = new ChoiceButton("  Cat Jíma is a talented game developer, but not everyone likes his designs. " +
+            "Attacks on the cat have increased on the Internet. \n   But, he has a secret weapon - a Twitter account. " +
             "With its help, he can defend his creative vision and bring the game to release. \n\n" +
             "  Help Jíma!", 0, 0, 10, 2.5/3, "units/sdf");
         add(hint);
@@ -54,7 +54,7 @@ class StartScreenState extends FlxState
 
         finalHintGroup = new FlxGroup();
 
-		var keyHintText = new Text("To continue please press      or");
+		var keyHintText = new Text("To continue press            or");
         keyHintText.reset(7, 160);
         /*keyHintText.color = 0xff2e5b75;
         keyHintText.borderSize = 1;

@@ -128,7 +128,7 @@ class ChoiceState extends CatZimaState
             
             case MENU_NARRATIVE:
                 text1 = "Choice 1: Choices - in text\n\nResult: Boring for hardcore players";
-                text2 = "Choice 2: Choices - in the gameplay\n\nResult: Not obvious to streamers and their viewers";
+                text2 = "Choice 2: Choices - in gameplay\n\nResult: Not obvious to streamers and their viewers";
 
                 text0 = "They argue on the forums...";
             
@@ -273,7 +273,7 @@ class ChoiceState extends CatZimaState
 
             //add(AchievementMessage.init());
 
-            var keyHintText = new Text("Press        , to play game!");
+            var keyHintText = new Text("Press        to play the game!");
 			keyHintText.reset(15, 164);
 			/*keyHintText.color = 0xff2e5b75;
 			keyHintText.borderSize = 1;

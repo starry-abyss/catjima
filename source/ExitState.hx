@@ -52,7 +52,7 @@ class ExitState extends FlxGroup
         background.scrollFactor.set();
         add(background);
 
-        keyHintText = new Text("Выход - Y\n\nВ игру - Esc");
+        keyHintText = new Text("Exit - Y\n\nTo the game - Esc");
         keyHintText.reset(7, 145);
 
         keyHintText.color = 0xff2e5b75;
@@ -84,6 +84,7 @@ class ExitState extends FlxGroup
             if (FlxG.keys.anyJustPressed(["Y"]))
             {
 		System.exit(0);
+                //openfl.Lib.close();
             }
         }
 

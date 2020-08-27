@@ -39,7 +39,7 @@ class AchievementMessage extends ChoiceButton
     {
         init();
 
-        singleton.setText("Новый значок: " + text);
+        singleton.setText("New badge: " + text);
         singleton.visible = true;
         singleton.timeLeft = 3.0;
     }

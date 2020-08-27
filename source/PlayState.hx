@@ -208,7 +208,7 @@ class PlayState extends CatZimaState
 		}
 		else
 		{
-			var keyHintText = new Text("Пауза/значки");
+			var keyHintText = new Text("Pause/badges");
 			keyHintText.reset(175, 4);
 			/*keyHintText.color = 0xff2e5b75;
 			keyHintText.borderSize = 1;

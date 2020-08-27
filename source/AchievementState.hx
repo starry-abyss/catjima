@@ -125,7 +125,7 @@ class AchievementState extends FlxSubState
 
         slot = 0;
 
-        register("fail", "Victim of beauty", "units/blonde");
+        register("fail", "Beauty's victim", "units/blonde");
         register("hehe", "A thin ice", "units/trololoshka");
         register("message", "Tweet machine", "units/tweetMaster");
 

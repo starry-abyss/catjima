@@ -45,7 +45,7 @@ class BriefingState extends CatZimaState
                 hint = new ChoiceButton("Unhappy to this choice: Casual player\n\nThey tap you to death if no games on the mobile phone!", 0, 0, 10, 4/9, "units/blonde");
 
             case HINT_HARDCORE:
-                hint = new ChoiceButton("Unhappy to this choice: Hardcore player\n\nMerged with the gamepad. Reaction - like a ninja!, 0, 0, 10, 4/9, "units/hardcore");
+                hint = new ChoiceButton("Unhappy to this choice: Hardcore player\n\nMerged with the gamepad. Reaction - like a ninja!", 0, 0, 10, 4/9, "units/hardcore");
 
             case HINT_TROLL:
                 hint = new ChoiceButton("Unhappy basically: Anonymous troll\n\nAvoid ANY contact! Affects others.", 0, 0, 10, 4/9, "units/trololoshka");
@@ -63,13 +63,13 @@ class BriefingState extends CatZimaState
                 hint = new ChoiceButton("After a rough showdown, the streamers are greatly offended. But on the other hand, Gamin wrote a review of your game and compared it to Dark Souls.", 0, 0, 10, 4/9, "units/streamer");
             
             case HINT_JOURNALIST:
-                hint = new ChoiceButton("The journalists are happy to fix bugs and ask their friends on Twitter to double the damage from messages.", 0, 0, 10, 4/9, "units/tweetShot2xIcon");
+                hint = new ChoiceButton("The journalists are happy about bug fixes and ask their friends on Twitter to double the damage from messages.", 0, 0, 10, 4/9, "units/tweetShot2xIcon");
             
             case HINT_NO_JOURNALIST:
                 hint = new ChoiceButton("Journalists cannot complete the game due to bugs. And those who did manage to, write negative reviews.", 0, 0, 10, 4/9, "units/bug");
 
             case HINT_BOSS:
-                hint = new ChoiceButton("Unhappy You Are Still Alive: Agent Smith\n\nSo, who forms the opinion of the players!", 0, 0, 10, 4/9, "units/boss");
+                hint = new ChoiceButton("Unhappy You Are Still Alive: Agent Smith\n\nSo that's who forms the opinion of the players!", 0, 0, 10, 4/9, "units/boss");
 
             case HINT_IDEA:
                 var i = CatZimaState.random.int(0, 3);
