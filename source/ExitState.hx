@@ -9,6 +9,7 @@ import flixel.ui.FlxButton;
 import flixel.math.FlxMath;
 import flixel.util.FlxSave;
 import flixel.group.FlxGroup;
+import openfl.system.System;
 
 class ExitState extends FlxGroup
 {
@@ -40,7 +41,7 @@ class ExitState extends FlxGroup
         return background != null && /*singleton.*/background.visible;
     }
 
-    /*private*/ function new()
+    public function new()
     {
         super();
 
@@ -82,7 +83,7 @@ class ExitState extends FlxGroup
         {
             if (FlxG.keys.anyJustPressed(["Y"]))
             {
-                openfl.Lib.close();
+		System.exit(0);
             }
         }
 
