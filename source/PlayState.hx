@@ -169,13 +169,13 @@ class PlayState extends CatZimaState
 				add(programmers);
 				add(blogs);
 
-				addCommitMessage("Вот оно что!");
-				addCommitMessage("Это - фича", true);
-				addCommitMessage("вроде так.");
-				addCommitMessage("достал кот");
-				addCommitMessage("попытка 2");
-				addCommitMessage("Завтра в отпуск");
-				addCommitMessage("Забыл умножить");
+				addCommitMessage("Here it is!");
+				addCommitMessage("This is feature", true);
+				addCommitMessage("like so.");
+				addCommitMessage("damn cat");
+				addCommitMessage("try #2");
+				addCommitMessage("Vacation tomorrow");
+				addCommitMessage("Forgot to multiply");
 				//addCommitMessage("со stack overflow");
 			}
 			else if (PlayState.enemiesToSpawn[0] == units.Boss)

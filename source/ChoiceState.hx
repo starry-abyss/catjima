@@ -95,7 +95,7 @@ class ChoiceState extends CatZimaState
         var text2 = "";
         var text0 = "";
 
-        text0 = "В следующем месяце...";
+        text0 = "Next month...";
 
         /*var i = CatZimaState.random.int(0, 3);
         text0 = 
