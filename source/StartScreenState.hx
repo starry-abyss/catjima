@@ -54,7 +54,7 @@ class StartScreenState extends FlxState
 
         finalHintGroup = new FlxGroup();
 
-		var keyHintText = new Text("To continue press            or");
+		var keyHintText = new Text("     To continue press       or");
         keyHintText.reset(7, 160);
         /*keyHintText.color = 0xff2e5b75;
         keyHintText.borderSize = 1;

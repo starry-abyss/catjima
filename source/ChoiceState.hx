@@ -273,7 +273,7 @@ class ChoiceState extends CatZimaState
 
             //add(AchievementMessage.init());
 
-            var keyHintText = new Text("Press        to play the game!");
+            var keyHintText = new Text(" Press       to play the game!");
 			keyHintText.reset(15, 164);
 			/*keyHintText.color = 0xff2e5b75;
 			keyHintText.borderSize = 1;

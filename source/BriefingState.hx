@@ -132,7 +132,7 @@ class BriefingState extends CatZimaState
         
         if (hintId == HINT_BLONDE)
         {
-            var keyHintText = new Text("Press            to send a tweet");
+            var keyHintText = new Text("   Press       to send a tweet");
             keyHintText.reset(20, 160);
             //keyHintText.color = 0xff000000;
             keyHintText.color = 0xffffffff;
