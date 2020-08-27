@@ -54,7 +54,7 @@ class BriefingState extends CatZimaState
                 hint = new ChoiceButton("Unhappy to this choice: Bug after update\n\nIntroduced by Agent Smith. Call the programmers!", 0, 0, 10, 4/9, "units/bug");
 
             case HINT_STREAMER:
-                hint = new ChoiceButton("Unhappy to this choice: Streamer\n\nThe audience is used to the branching in the text.", 0, 0, 10, 4/9, "units/streamer");
+                hint = new ChoiceButton("Unhappy to this choice: Streamer\n\nThe audience is used to text-based branching.", 0, 0, 10, 4/9, "units/streamer");
 
             case HINT_STREAMER_SAVE:
                 hint = new ChoiceButton("The rescued streamer realized that he was wrong, thanked you for being gentle with him, and unlocked an emoticon with a heart for you.", 0, 0, 10, 4/9, "units/health");
@@ -75,13 +75,13 @@ class BriefingState extends CatZimaState
                 var i = CatZimaState.random.int(0, 3);
                 var text = 
                     if (i == 0)
-                        "Кот Зúма:\n\n\"Let me post a photo of hugs with a robot!\"";
+                        "Cat Jíma:\n\n\"Let me post a photo of hugs with a robot!\"";
                     else if (i == 1)
-                        "Кот Зúма:\n\n\"And yet I'm a genius!\"";
+                        "Cat Jíma:\n\n\"And yet I'm a genius!\"";
                     else if (i == 2)
-                        "Кот Зúма:\n\n\"It's time to come up with a sequel!\"";
+                        "Cat Jíma:\n\n\"It's time to come up with a sequel!\"";
                     else //if (i == 3)
-                        "Кот Зúма:\n\n\"Mole Yneux and weregoose Purrhard are resting!\"";
+                        "Cat Jíma:\n\n\"Mole Yneux and weregoose Purrhard are resting!\"";
                     
                 hint = new ChoiceButton(text, 0, 0, 10, 4/9, "units/sdf");
                 
