@@ -20,6 +20,8 @@ class ChoiceButton extends FlxGroup
 
     var margin = 0;
 
+    var textFieldBoost: Float;
+
     public var speed: Int = 0;
 
     public var x(default, null): Float;
@@ -27,11 +29,12 @@ class ChoiceButton extends FlxGroup
     public var alpha: Float = 1.0;
     public var time: Float = 0.0;
 
-	public function new(text: String, x: Int, y: Int, margin: Int, height: Float, iconPath: String = null, slotType: String = "Slot", width: Float = 1.0)
+	public function new(text: String, x: Int, y: Int, margin: Int, height: Float, iconPath: String = null, slotType: String = "Slot", width: Float = 1.0, textFieldBoost: Float = 0.0)
 	{
 		super();
 
         this.margin = margin;
+        this.textFieldBoost = textFieldBoost;
 
         //loadGraphic("assets/images/units/" + graphic + ".png", false);
 
@@ -110,7 +113,7 @@ class ChoiceButton extends FlxGroup
             description.reset(background.x + innerMargin, background.y + innerMargin / 2);
         }
 
-        description.fieldWidth = background.width - (description.x - background.x) - innerMargin;
+        description.fieldWidth = background.width - (description.x - background.x) - innerMargin + textFieldBoost;
     }
 
     // for achievements

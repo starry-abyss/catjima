@@ -165,7 +165,7 @@ class AchievementState extends FlxSubState
     {
         var dy = -32;
 
-        var choice = new ChoiceButton(text, slot % 2 == 0 ? 5 : 170, dy + 70 + 30 * Math.floor(slot / 2), 0, 1/4, icon, "Slot_blue", 1/2.2);
+        var choice = new ChoiceButton(text, slot % 2 == 0 ? 5 : 170, dy + 70 + 30 * Math.floor(slot / 2), 0, 1/4, icon, "Slot_blue", 1/2.2, 15);
         var lockedChoice = new ChoiceButton("??????", slot % 2 == 0 ? 5 : 170, dy + 70 + 30 * Math.floor(slot / 2), 0, 1/4, "units/unknown", "Slot", 1/2.2);
 
         choice.setAlpha(1.0);
