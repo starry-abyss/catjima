@@ -19,9 +19,17 @@ class LogoState extends FlxState
     var touchGround = 2;
     var touchGroundGuard = false;
 
+    static var crash_dumper:crashdumper.CrashDumper;
+
 	override public function create():Void
 	{
 		super.create();
+
+	//generates unique id: "fooApp_YYYY-MM-DD_HH'MM'SS_CRASH"
+	var unique_id:String = crashdumper.SessionData.generateID("Catjima_");
+	
+	//starts the crashDumper
+	crash_dumper = new crashdumper.CrashDumper(unique_id); 
 
         logo_full = new FlxSprite();
         logo_full.loadGraphic("assets/images/GAMINATOR.png");

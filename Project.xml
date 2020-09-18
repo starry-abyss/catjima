@@ -2,7 +2,7 @@
 <project>
 	<!-- _________________________ Application Settings _________________________ -->
 	
-	<app title="Кот Зима против Интернета" file="catzima-gaminator2017" main="Main" version="1.0.0" company="scorched" />
+	<app title="Cat Jima Versus Internet" file="catjima" main="Main" version="1.0.0" company="scorched" />
 	
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 		or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"-->
@@ -29,12 +29,19 @@
 	
 	<set name="BUILD_DIR" value="export" />
 	<classpath name="source" />
+
+	<haxelib name="crashdumper" unless="flash" />
+
+	<haxedef name="HXCPP_STACK_LINE" />  <!--if you want line numbers-->
+
+	<haxedef name="HXCPP_STACK_TRACE" />  <!--if you want stack traces-->
 	
 	<!-- <assets path="assets" exclude="*.lch" if="debug" /> -->
 	<!-- <assets path="assets" exclude="*.lch" embed="true" unless="debug" /> -->
 
 	<assets path="assets/images" embed="true" />
-	<assets path="assets" exclude="*.lch|*.png" />
+	<assets path="assets/sounds" embed="true" exclude="*.lch" />
+	<assets path="assets" exclude="*.lch|*.png|GameOver.ogg|Win.ogg|*.wav" />
 
 	<!-- <assets path="assets" exclude="*.lch" embed="true" /> -->
 	
