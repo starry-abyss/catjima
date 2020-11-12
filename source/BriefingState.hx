@@ -169,6 +169,8 @@ class BriefingState extends CatZimaState
             return;
             
 		super.update(elapsed);
+		
+		CatZimaState.syncMusic(elapsed);
 
         if (startButton.overlaps(CatZimaState.playerBullets))
         {

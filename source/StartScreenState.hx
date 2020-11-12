@@ -101,6 +101,8 @@ class StartScreenState extends FlxState
             return;
 
 		super.update(elapsed);
+		
+		CatZimaState.syncMusic(elapsed);
 
         finalHintGroup.visible = !AchievementMessage.init().visible;
 

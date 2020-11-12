@@ -321,6 +321,8 @@ class ChoiceState extends CatZimaState
             return;
 
 		super.update(elapsed);
+		
+		CatZimaState.syncMusic(elapsed);
 
         var choice = -1;
 

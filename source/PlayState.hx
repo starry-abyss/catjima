@@ -429,6 +429,8 @@ class PlayState extends CatZimaState
 		if (subState == null)
 		{
 			super.update(elapsed);
+			
+			CatZimaState.syncMusic(elapsed);
 
 			FlxG.camera.scroll.x += elapsed * 30;
 

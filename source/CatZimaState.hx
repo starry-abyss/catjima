@@ -49,6 +49,8 @@ class CatZimaState extends FlxState
     static var volumeInLevel = 0.9;
     static var volumeInMenu = 0.5;
     static var musicMode = MUSIC_STOP;
+	
+	static var targetVolume:Array<Float> = null;
 
     static inline var MUSIC_STOP = -1;
     static inline var MUSIC_MENU = 0;
@@ -95,6 +97,8 @@ class CatZimaState extends FlxState
 
     static function initMusic(volume: Array<Float>)
     {
+		targetVolume = volume;
+		
         if (musicBeat == null)
         {
             musicBeat = new FlxSound();
@@ -117,13 +121,7 @@ class CatZimaState extends FlxState
             
             return true;
         }
-
-        //musicBeat.
-
-        musicBeat.fadeOut(0.9, volume[0]);
-        musicTrack1.fadeOut(0.9, volume[1]);
-        musicTrack2.fadeOut(0.9, volume[2]);
-
+		
         return false;
     }
 
@@ -146,7 +144,7 @@ class CatZimaState extends FlxState
     public static function musicLevel()
     {
         if (musicMode != MUSIC_LEVEL)
-            initMusic([volumeInLevel, volumeInLevel, 0]);
+            initMusic([volumeInMenu, volumeInLevel, 0]);
         
         musicMode = MUSIC_LEVEL;
     }
@@ -155,10 +153,10 @@ class CatZimaState extends FlxState
     {
         if (musicMode != -1)
         {
-            //initMusic([0, 0, 0]);
-            musicBeat.volume = 0;
+            initMusic([0, 0, 0]);
+            /*musicBeat.volume = 0;
             musicTrack1.volume = 0;
-            musicTrack2.volume = 0;
+            musicTrack2.volume = 0;*/
         }
             
         
@@ -317,6 +315,8 @@ class CatZimaState extends FlxState
             return;*/
             
 		super.update(elapsed);
+		
+		syncMusic(elapsed);
 
         if (!restartGame)
         {
@@ -334,5 +334,35 @@ class CatZimaState extends FlxState
             FlxG.switchState(new ChoiceState());
         }
         
+	}
+	
+	static public function syncMusic(elapsed: Float)
+	{
+		if (musicBeat.time != musicTrack1.time)
+			musicBeat.time = musicTrack1.time;
+			
+		if (musicTrack2.time != musicTrack1.time)
+			musicTrack2.time = musicTrack1.time;
+		
+		var fadeSpeed = 0.9;
+		
+		fadeMusic(musicBeat, targetVolume[0], fadeSpeed * elapsed);
+		fadeMusic(musicTrack1, targetVolume[1], fadeSpeed * elapsed);
+		fadeMusic(musicTrack2, targetVolume[2], fadeSpeed * elapsed);
+	}
+	
+	static function fadeMusic(music: FlxSound, volume: Float, fadeAmount: Float)
+	{
+		if (music.volume != volume)
+		{
+			if (music.volume > volume)
+			{
+				music.volume = Math.max(music.volume - fadeAmount, volume);
+			}
+			else
+			{
+				music.volume = Math.min(music.volume + fadeAmount, volume);
+			}
+		}
 	}
 }

@@ -190,6 +190,8 @@ class AchievementState extends FlxSubState
 	override public function update(elapsed:Float):Void
 	{
 		super.update(elapsed);
+		
+		CatZimaState.syncMusic(elapsed);
 
         /*var choice = -1;
 
